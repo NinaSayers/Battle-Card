@@ -2,11 +2,14 @@ namespace ExpEvaluator;
 
 public class Token
 {
-    string token;
-    public Token(string token)
+    public string Value {get; private set;}
+    public Symbol id {get; private set;}
+    public Token(string Value)
     {
-        this.token = token;
+        this.Value = Value;
+        id = Identify(Value);
     }
+
     public static List<Token> Tokenizar(string text)
     {
         string temp = "";
@@ -16,16 +19,6 @@ public class Token
         {
             string memory = temp;
             temp += text[i];
-            if(IsValidToken(temp))
-            {
-                cond = true;
-                {
-                    if(i == text.Length-1)
-                    {
-                        list.Add(new Token(temp));
-                    }
-                }
-            }
             if(!IsValidToken(temp) && cond)
             {
                 cond = false;
@@ -37,13 +30,36 @@ public class Token
             {
                 temp = "";
             }
+            if(IsValidToken(temp) && !string.IsNullOrWhiteSpace(temp))
+            {
+                cond = true;
+                {
+                    if(i == text.Length-1)
+                    {
+                        list.Add(new Token(temp));
+                    }
+                }
+            }
         }
         return list;
+    }
+    private Symbol Identify(string value)
+    {
+        if(value == "aumenta")
+        {
+            return Symbol.Add;
+        }
+        if(value == "disminuye")
+        {
+            return Symbol.Sub;
+        }
+
+        return Symbol.i;
     }
     public static bool IsValidToken(string text)
     {
         bool cond = true;
-        string [] tokens = new string [] {"si","aumenta","disminuye","ataque","defensa"};
+        string [] tokens = new string [] {"si","entonces",".","aumenta","disminuye","vida","ataque","defensa"};
         foreach(string st in tokens)
         {
             if(st == text)
@@ -73,8 +89,29 @@ public class Token
         }
         return false;
     }
+    private bool IsNumber()
+    {
+        string s = this.Value ;
+        foreach (char item in s)
+        {
+            if(!IsNumber(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static double GetNumber(Token token)
+    {
+        if(token.IsNumber())
+        {
+            return Double.Parse(token.Value);
+        }
+        return 0;
+    }
     public void Print()
     {
-        System.Console.WriteLine(this.token);
+        System.Console.WriteLine(this.Value);
     }
 }
