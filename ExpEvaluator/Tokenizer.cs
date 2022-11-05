@@ -53,7 +53,10 @@ public class Token
         {
             return Symbol.Sub;
         }
-
+        if(value == "null")
+        {
+            return Symbol.Invalid;
+        }
         return Symbol.i;
     }
     public static bool IsValidToken(string text)

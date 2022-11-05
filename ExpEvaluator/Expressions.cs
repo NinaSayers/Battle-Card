@@ -7,8 +7,8 @@ public abstract class Expression
 
 public abstract class BinaryExpression : Expression
 {
-    public Expression left;
-    public Expression right;
+    protected Expression left;
+    protected Expression right;
 
     public BinaryExpression(Expression left, Expression right)
     {

@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace ExpEvaluator;
 
-public enum Symbol { Add, Sub, Mult, Div, i}
+public enum Symbol { E, T, Add, Sub, Mult, Div, i, Invalid}
 public class Node
 {
     public Symbol id;
-    public List<Node> children = new List<Node>();
+    public List<Node> children {get; private set;}
     public Token token;
     public Node(Symbol symbol, List<Node> children, Token token)
     {
