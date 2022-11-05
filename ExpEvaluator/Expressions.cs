@@ -1,6 +1,6 @@
 namespace ExpEvaluator;
 
-public abstract class Expression : Node
+public abstract class Expression
 {
     public abstract double Evaluate();
 }
