@@ -5,7 +5,7 @@ public abstract class Expression : Node
     public abstract double Evaluate();
 }
 
-public class BinaryExpression : Expression
+public abstract class BinaryExpression : Expression
 {
     public Expression left;
     public Expression right;
@@ -24,14 +24,14 @@ public class BinaryExpression : Expression
         return this.Evaluate(leftVal, rightVal);
     }
 
-    protected override double Evaluate(double leftVal, double rightVal);
+    protected abstract double Evaluate(double leftVal, double rightVal);
 }
 
 public class Constant : Expression
 {
     private double value;
 
-    public Number(double value)
+    public Constant(double value)
     {
         this.value = value;
     }
@@ -45,21 +45,17 @@ public class Constant : Expression
 
 public class Add : BinaryExpression
 {
-    public Add(Expression left, Expression right) : base(left, right);
+    public Add(Expression left, Expression right) : base(left, right){}
 
     protected override double Evaluate(double left, double right)
     {
         return left + right;
     }
-    public override bool Validate(IContext context)
-    {
-        return left.Validate(context) && right.Validate(context);
-    }
 }
 
 public class Substract : BinaryExpression
 {
-    public Substract(Expression left, Expression right) : base(left, right);
+    public Substract(Expression left, Expression right) : base(left, right){}
 
     protected override double Evaluate(double left, double right)
     {
@@ -68,7 +64,7 @@ public class Substract : BinaryExpression
 }
 public class Multiply : BinaryExpression
 {
-    public Multiply(Expression left, Expression right) : base(left, right);
+    public Multiply(Expression left, Expression right) : base(left, right){}
 
     protected override double Evaluate(double left, double right)
     {
@@ -77,16 +73,10 @@ public class Multiply : BinaryExpression
 }
 public class Divide : BinaryExpression
 {
-    public Divide(Expression left, Expression right) : base(left, right);
+    public Divide(Expression left, Expression right) : base(left, right){}
 
     protected override double Evaluate(double left, double right)
     {
         return left / right;
     }
-}
-
-public class FunCall : Expression
-{
-    public string Identifier;
-    public List<Expression> Args;
 }
