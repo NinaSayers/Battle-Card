@@ -17,6 +17,7 @@ public class Node
 
     public Expression GetAST()
     {
+        // System.Console.WriteLine(id);
         if(children.Count == 3 && ((int)children[1].id) >= 2)
         {
             if(children[1].id == Symbol.Add)
@@ -42,6 +43,7 @@ public class Node
         }
         else if(children.Count() == 0 && id == Symbol.i)
         {
+            // System.Console.WriteLine(token.Value);
             return new Constant(Token.GetNumber(token));
         }
 

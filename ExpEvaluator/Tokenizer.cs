@@ -53,6 +53,14 @@ public class Token
         {
             return Symbol.Sub;
         }
+        if(value == "multiplica")
+        {
+            return Symbol.Mult;
+        }
+        if(value == "divid")
+        {
+            return Symbol.Div;
+        }
         if(value == "null")
         {
             return Symbol.Invalid;
@@ -62,7 +70,7 @@ public class Token
     public static bool IsValidToken(string text)
     {
         bool cond = true;
-        string [] tokens = new string [] {"si","entonces",".","aumenta","disminuye","vida","ataque","defensa"};
+        string [] tokens = new string [] {"si","entonces",".","aumenta","disminuye","multiplica","divid","vida","ataque","defensa"};
         foreach(string st in tokens)
         {
             if(st == text)

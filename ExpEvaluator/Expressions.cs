@@ -40,6 +40,10 @@ public class Constant : Expression
     {
         return value;
     }
+    public override string ToString()
+    {
+        return value.ToString();
+    }
 
 }
 
@@ -51,6 +55,10 @@ public class Add : BinaryExpression
     {
         return left + right;
     }
+    public override string ToString()
+    {
+        return $"({left.ToString()}) + ({right.ToString()})";
+    }
 }
 
 public class Substract : BinaryExpression
@@ -61,6 +69,10 @@ public class Substract : BinaryExpression
     {
         return left - right;
     }
+    public override string ToString()
+    {
+        return $"({left.ToString()}) - ({right.ToString()})";
+    }
 }
 public class Multiply : BinaryExpression
 {
@@ -70,6 +82,10 @@ public class Multiply : BinaryExpression
     {
         return left * right;
     }
+    public override string ToString()
+    {
+        return $"({left.ToString()}) * ({right.ToString()})";
+    }
 }
 public class Divide : BinaryExpression
 {
@@ -78,5 +94,9 @@ public class Divide : BinaryExpression
     protected override double Evaluate(double left, double right)
     {
         return left / right;
+    }
+    public override string ToString()
+    {
+        return $"({left.ToString()}) / ({right.ToString()})";
     }
 }

@@ -19,7 +19,7 @@ public class Parser
             Node temp = Parse(list, i+1, new List<Node>());
             if(temp.children.Count() > 1)
             {
-                result.Add(new Node(temp.id, result, temp.token));
+                result.Add(temp);
                 return new Node(Symbol.T, result, new Token("null"));
             }
         }
