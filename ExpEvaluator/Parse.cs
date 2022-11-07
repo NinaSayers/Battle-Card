@@ -12,7 +12,7 @@ public class Parser
         {
             return new Node(Symbol.T, result, new Token("null"));
         }
-        if((int)list[i].id >= 2 && (int)list[i].id < 6)
+        if((int)list[i].id >= 2 && (int)list[i].id <= 6)
         {
             
             result.Add(new Node(list[i].id, new List<Node>(), list[i]));
@@ -23,7 +23,7 @@ public class Parser
                 return new Node(Symbol.T, result, new Token("null"));
             }
         }
-        else
+        else if(list[i].id == Symbol.i)
         {
             result.Add(new Node(list[i].id, new List<Node>(), list[i]));
         }

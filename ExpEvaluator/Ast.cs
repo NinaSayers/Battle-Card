@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ExpEvaluator;
 
-public enum Symbol { E, T, Add, Sub, Mult, Div, i, Invalid}
+public enum Symbol { E, T, Add, Sub, Mult, Div, Asg, i, If, Then, Invalid}
 public class Node
 {
     public Symbol id;
@@ -17,7 +17,6 @@ public class Node
 
     public Expression GetAST()
     {
-        // System.Console.WriteLine(id);
         if(children.Count == 3 && ((int)children[1].id) >= 2)
         {
             if(children[1].id == Symbol.Add)
@@ -36,6 +35,10 @@ public class Node
             {
                 return new Divide(children[0].GetAST(), children[2].GetAST());
             }
+            if(children[1].id == Symbol.Asg)
+            {
+                return new Assign(children[0].GetAST(), children[2].GetAST());
+            }
         }
         else if(children.Count() == 1)
         {
@@ -43,7 +46,6 @@ public class Node
         }
         else if(children.Count() == 0 && id == Symbol.i)
         {
-            // System.Console.WriteLine(token.Value);
             return new Constant(Token.GetNumber(token));
         }
 

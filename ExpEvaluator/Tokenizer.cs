@@ -61,16 +61,21 @@ public class Token
         {
             return Symbol.Div;
         }
+        if(value == "igual")
+        {
+            return Symbol.Asg;
+        }
         if(value == "null")
         {
             return Symbol.Invalid;
         }
+
         return Symbol.i;
     }
     public static bool IsValidToken(string text)
     {
         bool cond = true;
-        string [] tokens = new string [] {"si","entonces",".","aumenta","disminuye","multiplica","divid","vida","ataque","defensa"};
+        string [] tokens = new string [] {"si","entonces","igual","aumenta","disminuye","multiplica","divid","vida","ataque","defensa"};
         foreach(string st in tokens)
         {
             if(st == text)
