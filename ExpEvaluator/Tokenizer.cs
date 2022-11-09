@@ -49,6 +49,14 @@ public class Token
         {
             return Symbol.Add;
         }
+        if(value == "si")
+        {
+            return Symbol.If;
+        }
+        if(value == "entonces")
+        {
+            return Symbol.Then;
+        }
         if(value == "disminuye")
         {
             return Symbol.Sub;
@@ -65,6 +73,14 @@ public class Token
         {
             return Symbol.Asg;
         }
+        if(value == "mayor")
+        {
+            return Symbol.Mayor;
+        }
+        if(value == "menor")
+        {
+            return Symbol.Menor;
+        }
         if(value == "null")
         {
             return Symbol.Invalid;
@@ -75,7 +91,7 @@ public class Token
     public static bool IsValidToken(string text)
     {
         bool cond = true;
-        string [] tokens = new string [] {"si","entonces","igual","aumenta","disminuye","multiplica","divid","vida","ataque","defensa"};
+        string [] tokens = new string [] {"si","entonces","igual","aumenta","disminuye","multiplica","divid","vida","ataque","defensa","mayor", "menor"};
         foreach(string st in tokens)
         {
             if(st == text)

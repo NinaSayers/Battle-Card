@@ -113,7 +113,7 @@ public class Assign : BinaryExpression
         return $"({left.ToString()}) = ({right.ToString()})";
     }
 }
-public class BooleanExpression
+public class BooleanExpression : Expression
 {
     public Expression left;
     public Expression right;
@@ -126,7 +126,15 @@ public class BooleanExpression
         this.op = op;
     }
 
-    public bool Evaluate()
+    public override double Evaluate()
+    {
+        if(this.EvaluateBool())
+        {
+            return 1;
+        }
+        return 0;
+    }
+    private bool EvaluateBool()
     {
         double leftVal = left.Evaluate();
         double rightVal = right.Evaluate();
@@ -162,4 +170,9 @@ public class BooleanExpression
         }
         throw new Exception("Invalid Operator");
     }
+    public override string ToString()
+    {
+        return $"({left.ToString()}) " + op + $" ({right.ToString()})";
+    }
+
 }
