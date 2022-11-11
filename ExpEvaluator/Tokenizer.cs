@@ -45,27 +45,27 @@ public class Token
     }
     private Symbol Identify(string value)
     {
-        if(value == "aumenta")
+        if(value == "plus")
         {
             return Symbol.Add;
         }
-        if(value == "si")
+        if(value == "if")
         {
             return Symbol.If;
         }
-        if(value == "entonces")
+        if(value == "then")
         {
             return Symbol.Then;
         }
-        if(value == "disminuye")
+        if(value == "minus")
         {
             return Symbol.Sub;
         }
-        if(value == "multiplica")
+        if(value == "mult")
         {
             return Symbol.Mult;
         }
-        if(value == "divid")
+        if(value == "div")
         {
             return Symbol.Div;
         }
@@ -81,6 +81,22 @@ public class Token
         {
             return Symbol.Menor;
         }
+        if(value == "igualI")
+        {
+            return Symbol.Igual;
+        }
+        if(value == "mayorI")
+        {
+            return Symbol.MayorI;
+        }
+        if(value == "menorI")
+        {
+            return Symbol.MenorI;
+        }
+        if(value == "dist")
+        {
+            return Symbol.Dist;
+        }
         if(value == "null")
         {
             return Symbol.Invalid;
@@ -91,7 +107,7 @@ public class Token
     public static bool IsValidToken(string text)
     {
         bool cond = true;
-        string [] tokens = new string [] {"si","entonces","igual","aumenta","disminuye","multiplica","divid","vida","ataque","defensa","mayor", "menor"};
+        string [] tokens = new string [] {"if","then","igual","plus","minus","mult","div","vida","ataque","defensa","mayor", "menor", "igualI", "dist", "menorI", "mayorI"};
         foreach(string st in tokens)
         {
             if(st == text)

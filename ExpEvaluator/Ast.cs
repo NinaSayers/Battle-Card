@@ -17,23 +17,6 @@ public class Node
 
     public Expression GetAST()
     {
-        // System.Console.WriteLine(id);
-        // System.Console.WriteLine(children.Count);
-        // foreach(Node n in children)
-        // {
-        //     System.Console.WriteLine(" ");
-        //     System.Console.WriteLine(n.id);
-        //     System.Console.WriteLine(n.children.Count);
-        //     if(n.children.Count() > 1)
-        //     {
-        //         foreach(Node m in n.children)
-        //         {
-        //             System.Console.WriteLine(" ");
-        //             System.Console.WriteLine(m.id);
-        //             System.Console.WriteLine(m.children.Count);
-        //         }
-        //     }
-        // }
         
         if(children.Count == 3 && ((int)children[1].id) >= 2)
         {
