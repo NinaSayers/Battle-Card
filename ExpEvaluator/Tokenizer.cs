@@ -69,27 +69,27 @@ public class Token
         {
             return Symbol.Div;
         }
-        if(value == "igual")
+        if(value == "idem")
         {
             return Symbol.Asg;
         }
-        if(value == "mayor")
+        if(value == "maior")
         {
             return Symbol.Mayor;
         }
-        if(value == "menor")
+        if(value == "minor")
         {
             return Symbol.Menor;
         }
-        if(value == "igualI")
+        if(value == "idemI")
         {
             return Symbol.Igual;
         }
-        if(value == "mayorI")
+        if(value == "maiorI")
         {
             return Symbol.MayorI;
         }
-        if(value == "menorI")
+        if(value == "minorI")
         {
             return Symbol.MenorI;
         }
@@ -107,7 +107,7 @@ public class Token
     public static bool IsValidToken(string text)
     {
         bool cond = true;
-        string [] tokens = new string [] {"if","then","igual","plus","minus","mult","div","vida","ataque","defensa","mayor", "menor", "igualI", "dist", "menorI", "mayorI"};
+        string [] tokens = new string [] {"if","then","idem","plus","minus","mult","div","maior","minor","idemI","dist","minorI","maiorI"};
         foreach(string st in tokens)
         {
             if(st == text)

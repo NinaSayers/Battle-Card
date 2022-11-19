@@ -71,14 +71,7 @@ public class Node
         }
         else if(id == Symbol.If)
         {
-            if(children[0].GetAST().Evaluate() == 1)
-            {
-                return children[1].GetAST();
-            }
-            else
-            {
-                return new Constant(0);
-            }
+            return new Conditional(children[0].GetAST(), children[1].GetAST());
         }
         else if(children.Count() == 0 && id == Symbol.i)
         {

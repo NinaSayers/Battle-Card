@@ -174,5 +174,26 @@ public class BooleanExpression : Expression
     {
         return $"({left.ToString()}) " + op + $" ({right.ToString()})";
     }
+}
 
+public abstract class Statement : Expression
+{
+    public abstract override double Evaluate();
+}
+
+public class Conditional : Statement
+{
+    public Expression Condition;
+    public Expression Action;
+
+    public Conditional(Expression Condition, Expression Action)
+    {
+        this.Condition = Condition;
+        this.Action = Action;
+    }
+
+    public override double Evaluate()
+    {
+        return (Condition.Evaluate() == 1) ? Action.Evaluate() : 0;
+    }
 }
