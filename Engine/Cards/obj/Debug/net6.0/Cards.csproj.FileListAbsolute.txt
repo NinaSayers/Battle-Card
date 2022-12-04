@@ -1,0 +1,15 @@
+/home/heveryt/Battle-Cartd/Engine/Cards/bin/Debug/net6.0/Cards
+/home/heveryt/Battle-Cartd/Engine/Cards/bin/Debug/net6.0/Cards.deps.json
+/home/heveryt/Battle-Cartd/Engine/Cards/bin/Debug/net6.0/Cards.runtimeconfig.json
+/home/heveryt/Battle-Cartd/Engine/Cards/bin/Debug/net6.0/Cards.dll
+/home/heveryt/Battle-Cartd/Engine/Cards/bin/Debug/net6.0/Cards.pdb
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.csproj.AssemblyReference.cache
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.GeneratedMSBuildEditorConfig.editorconfig
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.AssemblyInfoInputs.cache
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.AssemblyInfo.cs
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.csproj.CoreCompileInputs.cache
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.dll
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/refint/Cards.dll
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.pdb
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/Cards.genruntimeconfig.cache
+/home/heveryt/Battle-Cartd/Engine/Cards/obj/Debug/net6.0/ref/Cards.dll

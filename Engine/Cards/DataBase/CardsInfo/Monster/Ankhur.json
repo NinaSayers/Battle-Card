@@ -1,0 +1,1 @@
+{"CardName":"Ankhur","Description":"Is the most powerfull warrior in the North Army","Health":2000,"Attack":2400,"Defense":2000,"strEffect":"if Player1.life maior 300 then x creace Player1.life","Effect":{}}
