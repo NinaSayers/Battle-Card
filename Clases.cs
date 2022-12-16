@@ -54,11 +54,11 @@ namespace ProeliumEngine
 
                             Move jugada = player.Move_;
                             if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; continue; }
-                            if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; continue; }
+                            if (jugada.Action == ActionsEnum.endTurn) { state.SetTurnsByPlayer(this.gameID, player.ID, state.TurnsByPlayer[player.ID] + 1); endTurn = true; continue; }
                             if (this.rules.IsValidMove(jugada, phase, player.ID, this.state))
                             {
                                 if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; }
-                                if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; }
+                                if (jugada.Action == ActionsEnum.endTurn) { state.SetTurnsByPlayer(this.gameID, player.ID, state.TurnsByPlayer[player.ID] + 1); endTurn = true; }
                                 else
                                 {
                                     if (jugada.Action == ActionsEnum.attackCard || jugada.Action == ActionsEnum.attackLifePoints)
@@ -84,7 +84,7 @@ namespace ProeliumEngine
                             }
                             else throw new Exception("Jugada no válida."); //Cómo darle a conocer esto al player sin lanzar exception?**???
                         }
-                        if (endTurn) break;
+                        if (endTurn) { state.SetTurnsByPlayer(this.gameID, player.ID, state.TurnsByPlayer[player.ID] + 1); break; }
                     }
                     endTurn = true;
 
@@ -297,7 +297,19 @@ namespace ProeliumEngine
         private Table table;
         private int gameID;
 
-        public State(int gameTurns, List<int> turnsByPlayer, PhasesEnum actualPhase, List<Player> players, List<List<Card>> hands, List<List<bool>> yaAtacó, Table table, int gameID, List<float> lifePoints)
+        public State(List<Player> players, List<List<Card>> hands, Table table, int gameID, List<float> lifePoints)
+        {
+            this.turnsByPlayer = new List<int>();
+            this.actualPhase = PhasesEnum.mainPhase;
+            this.players = players;
+            this.hands = hands;
+            this.yaAtacó = new List<List<bool>>();
+            this.table = table;
+            this.gameID = gameID;
+            this.lifePoints = lifePoints;
+        }
+
+        public State(int gameTurns, List<int> turnsByPlayer, PhasesEnum actualPhase, List<Player> players, List<List<Card>> hands, List<List<bool>> yaAtacó, List<float> lifePoints, Table table, int gameID)
         {
             this.gameTurns = gameTurns;
             this.turnsByPlayer = turnsByPlayer;
@@ -305,10 +317,11 @@ namespace ProeliumEngine
             this.players = players;
             this.hands = hands;
             this.yaAtacó = yaAtacó;
+            this.lifePoints = lifePoints;
             this.table = table;
             this.gameID = gameID;
-            this.lifePoints = lifePoints;
         }
+
         public int GameTurns { get { return this.gameTurns; } }
         public List<int> TurnsByPlayer { get { return this.turnsByPlayer; } }
         public PhasesEnum ActualPhase { get { return this.actualPhase; } }
@@ -784,7 +797,7 @@ namespace ProeliumEngine
     }
     public class MagicCard : Card
     {
-                public string Name { get; private set; }
+        public string Name { get; private set; }
     }
     public class FieldCard : Card
     {
