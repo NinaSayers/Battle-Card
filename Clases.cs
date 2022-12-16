@@ -104,7 +104,7 @@ namespace ProeliumEngine
             return Game_().GetEnumerator();
         }
 
-       IEnumerator IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
@@ -428,9 +428,20 @@ namespace ProeliumEngine
         private List<List<Card>> decks;
         private List<Card> principalDeck;
         private List<Card> cemetery;
-        private Card fieldCard;
+        private Card? fieldCard;
         private int gameID;
         private int maximumCardsInvokeds;
+
+        public Table(List<List<Card>> decks, List<Card> principalDeck, int gameID, int maximumCardsInvokeds = 3)
+        {
+            this.magicCardsInvokeds = new List<List<Card>>();
+            this.monsterCardsInvokeds = new List<List<Card>>();
+            this.decks = decks;
+            this.principalDeck = principalDeck;
+            this.cemetery = new List<Card>();
+            this.gameID = gameID;
+            this.maximumCardsInvokeds = maximumCardsInvokeds;
+        }
 
         public Table(List<List<Card>> magicCardsInvokeds, List<List<Card>> monsterCardsInvokeds, List<List<Card>> decks, List<Card> principalDeck, List<Card> cemetery, Card fieldCard, int gameID, int maximumCardsInvokeds)
         {
@@ -773,8 +784,7 @@ namespace ProeliumEngine
     }
     public class MagicCard : Card
     {
-        public string name; //implementación de la interface 
-        public string Name { get; private set; }
+                public string Name { get; private set; }
     }
     public class FieldCard : Card
     {
