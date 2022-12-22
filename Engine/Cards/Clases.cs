@@ -1,4 +1,5 @@
 using System.Collections;
+using ExpEvaluator;
 
 namespace ProeliumEngine
 {
@@ -34,6 +35,7 @@ namespace ProeliumEngine
                 foreach (Player player in this.state.Players)
                 {
                     endTurn = false;
+                    state.ResetYaAtacó(gameID, player.ID);
                     maskAttack = new bool[this.state.Table.GetMonsterCardsInvokeds(player.ID).Count];
 
                     foreach (PhasesEnum phase in this.phases)
@@ -47,18 +49,18 @@ namespace ProeliumEngine
                             yield return this.state;
                             continue;
                         }
-                        while (!endPhase || !endTurn)
+                        while (!endPhase && !endTurn)
                         {
                             this.state.SetActualPhase(this.gameID, phase);
                             yield return this.state;
 
-                            Move jugada = player.Move_;
+                            Move jugada = player.Jugada(state);
                             if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; continue; }
-                            if (jugada.Action == ActionsEnum.endTurn) { state.SetTurnsByPlayer(this.gameID, player.ID, state.TurnsByPlayer[player.ID] + 1); endTurn = true; continue; }
+                            if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; continue; }
                             if (this.rules.IsValidMove(jugada, phase, player.ID, this.state))
                             {
                                 if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; }
-                                if (jugada.Action == ActionsEnum.endTurn) { state.SetTurnsByPlayer(this.gameID, player.ID, state.TurnsByPlayer[player.ID] + 1); endTurn = true; }
+                                if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; }
                                 else
                                 {
                                     if (jugada.Action == ActionsEnum.attackCard || jugada.Action == ActionsEnum.attackLifePoints)
@@ -84,7 +86,7 @@ namespace ProeliumEngine
                             }
                             else throw new Exception("Jugada no válida."); //Cómo darle a conocer esto al player sin lanzar exception?**???
                         }
-                        if (endTurn) { state.SetTurnsByPlayer(this.gameID, player.ID, state.TurnsByPlayer[player.ID] + 1); break; }
+                        if (endTurn) break;
                     }
                     endTurn = true;
 
@@ -135,9 +137,9 @@ namespace ProeliumEngine
         {
             foreach (bool card in cardsQueAtacaron)
             {
-                if (!card) return false;
+                if (card) return true;
             }
-            return true;
+            return false;
         }
     }
     public class Actions
@@ -262,7 +264,16 @@ namespace ProeliumEngine
             MyExceptions.InvalidAttackantCardException(state.Table.MonsterCardsInvokeds[playerID], (attackantCard as MonsterCard));
 
             State newState = new State(state.GameTurns, state.TurnsByPlayer, state.ActualPhase, state.Players, state.Hands, state.YaAtacó, state.Table, this.gameID, state.LifePoints);
-            newState.SetLifePoints(gameID, playerID, state.GetLifePoints(playerID) - (attackantCard as MonsterCard).Attack);
+            if(playerID == 0)
+            {
+                newState.SetLifePoints(gameID, 1, state.GetLifePoints(1) - 1);
+
+            }
+            else
+            {
+                newState.SetLifePoints(gameID, 0, state.GetLifePoints(0) - 1);
+            }
+            newState.MarkYaAtacó(gameID, playerID, attackantCard);
             return newState;
         }
         public State Discard(int gameID, int playerID, Card card, State state) //descartar cartas de la mano y enviarlas al mazo del jugador
@@ -297,19 +308,7 @@ namespace ProeliumEngine
         private Table table;
         private int gameID;
 
-        public State(List<Player> players, List<List<Card>> hands, Table table, int gameID, List<float> lifePoints)
-        {
-            this.turnsByPlayer = new List<int>();
-            this.actualPhase = PhasesEnum.mainPhase;
-            this.players = players;
-            this.hands = hands;
-            this.yaAtacó = new List<List<bool>>();
-            this.table = table;
-            this.gameID = gameID;
-            this.lifePoints = lifePoints;
-        }
-
-        public State(int gameTurns, List<int> turnsByPlayer, PhasesEnum actualPhase, List<Player> players, List<List<Card>> hands, List<List<bool>> yaAtacó, List<float> lifePoints, Table table, int gameID)
+        public State(int gameTurns, List<int> turnsByPlayer, PhasesEnum actualPhase, List<Player> players, List<List<Card>> hands, List<List<bool>> yaAtacó, Table table, int gameID, List<float> lifePoints)
         {
             this.gameTurns = gameTurns;
             this.turnsByPlayer = turnsByPlayer;
@@ -317,11 +316,10 @@ namespace ProeliumEngine
             this.players = players;
             this.hands = hands;
             this.yaAtacó = yaAtacó;
-            this.lifePoints = lifePoints;
             this.table = table;
             this.gameID = gameID;
+            this.lifePoints = lifePoints;
         }
-
         public int GameTurns { get { return this.gameTurns; } }
         public List<int> TurnsByPlayer { get { return this.turnsByPlayer; } }
         public PhasesEnum ActualPhase { get { return this.actualPhase; } }
@@ -447,8 +445,8 @@ namespace ProeliumEngine
 
         public Table(List<List<Card>> decks, List<Card> principalDeck, int gameID, int maximumCardsInvokeds = 3)
         {
-            this.magicCardsInvokeds = new List<List<Card>>();
-            this.monsterCardsInvokeds = new List<List<Card>>();
+            this.magicCardsInvokeds = new List<List<Card>>{new List<Card>(3), new List<Card>(3)};
+            this.monsterCardsInvokeds = new List<List<Card>>{new List<Card>(3), new List<Card>(3)};
             this.decks = decks;
             this.principalDeck = principalDeck;
             this.cemetery = new List<Card>();
@@ -565,7 +563,7 @@ namespace ProeliumEngine
 
         public bool IsValidMove(Move jugada, PhasesEnum phase, int playerID, State state)
         {
-            MyExceptions.InvalidPlayerIDException(playerID, this.state.Hands.Count - 1);
+            MyExceptions.InvalidPlayerIDException(playerID, state.Hands.Count - 1);
             switch (jugada.Action)
             {
                 case ActionsEnum.mix://Falta cosiderar si hay fases en específico en las que se pueda (o no) barajar
@@ -584,7 +582,7 @@ namespace ProeliumEngine
 
         public bool IsValidInvoke(int playerID, State state, Move jugada)
         {
-            MyExceptions.InvalidPlayerIDException(playerID, this.state.Hands.Count - 1);
+            MyExceptions.InvalidPlayerIDException(playerID, state.Hands.Count - 1);
             if (jugada.CardsInTheAction == null || jugada.CardsInTheAction.Count == 0) return false;
             if (state.Table.MonsterCardsInvokeds[playerID].Count == state.Table.MaximumCardsInvokeds) return false;
             if (state.Table.MagicCardsInvokeds[playerID].Count == state.Table.MaximumCardsInvokeds) return false;
@@ -592,7 +590,7 @@ namespace ProeliumEngine
         }
         public bool IsValidAttack(State state, int playerID, Move jugada)
         {
-            MyExceptions.InvalidPlayerIDException(playerID, this.state.Hands.Count - 1);
+            MyExceptions.InvalidPlayerIDException(playerID, state.Hands.Count - 1);
             if (jugada.CardsInTheAction == null || jugada.CardsInTheAction.Count != 2) return false;
             if (!(jugada.CardsInTheAction[0] is MonsterCard) || !(jugada.CardsInTheAction[1] is MonsterCard)) return false;
             if (state.IsFullYaAtacó(playerID)) return false;
@@ -619,7 +617,7 @@ namespace ProeliumEngine
         }
         public bool IsValidAttackPointsLife(State state, int attackantPlayerID, Move jugada)
         {
-            MyExceptions.InvalidPlayerIDException(attackantPlayerID, this.state.Hands.Count - 1);
+            MyExceptions.InvalidPlayerIDException(attackantPlayerID, state.Hands.Count - 1);
             if (jugada.CardsInTheAction == null || jugada.CardsInTheAction.Count == 0) return false;
             if (!(jugada.CardsInTheAction[0] is MonsterCard)) return false;
             if (state.IsFullYaAtacó(attackantPlayerID)) return false;
@@ -747,31 +745,39 @@ namespace ProeliumEngine
     public abstract class Card
     {
         public string Name { get; private set; }
+        public abstract State EffectExecute(State state, int playerID);
     }
     public class MonsterCard : Card
     {
         private string name;
-        private CardState cardState;
         private float life; //por puntos (programar a parte para la futura creación de un monstruo random)
         private float attack; //número para la estadística del cálculo de daño (programar a parte para la futura creación de un monstruo random)
         private float defense; //número para la estadística del cálculo de daño (programar a parte para la futura creación de un monstruo random)
-        private int gameID = -1;//Type
+        private int gameID = 1;//Type
+        private string strEffect;
 
         //private T cardState; //normal, borracho, lento, óptimo, moral... por efecto de alguna carta de hechizo (programar a parte para la futura creación de un monstruo random)
 
-        public MonsterCard(string name, CardState cardState, float life, float attack, float defense)
+        public MonsterCard(string name, float life, float attack, float defense, string strEffect)
         {
             this.name = name;
-            this.cardState = cardState;
+            // this.cardState = cardState;
             this.life = life;
             this.attack = attack;
             this.defense = defense;
+            this.strEffect = strEffect;
         }
+        Statement Effect { get {return Parser.Construct(strEffect);} set{} }
         public string Name { get { return this.name; } }
-        public CardState CardState { get { return this.cardState; } }
+        // public CardState CardState { get { return this.cardState; } }
         public float Life { get { return this.life; } }
         public float Attack { get { return this.attack; } }
         public float Defense { get { return this.defense; } }
+
+        public override State EffectExecute(State state, int playerID)
+        {
+            return Effect.Execute(state, playerID);
+        }
 
         public void SetLife(int gameID, float modifiedLife)
         {
@@ -798,10 +804,27 @@ namespace ProeliumEngine
     public class MagicCard : Card
     {
         public string Name { get; private set; }
+        public string strEffect {get; private set;}
+        Statement Effect { get { return Parser.Construct(strEffect); } set { } }
+        public MagicCard(string Name, string strEffect)
+        {
+            this.Name = Name;
+            this.strEffect = strEffect;
+        }
+        public override State EffectExecute(State state, int playerID)
+        {
+            return Effect.Execute(state, playerID);
+        }
     }
     public class FieldCard : Card
     {
         public string Name { get; private set; }
+        public string strEffect;
+        Statement Effect { get { return Parser.Construct(strEffect); } set { } }
+        public override State EffectExecute(State state, int playerID)
+        {
+            return Effect.Execute(state, playerID);
+        }
     }
 
     #endregion Cards
@@ -823,32 +846,43 @@ namespace ProeliumEngine
         public ActionsEnum Action { get { return this.action; } }
         public List<Card> CardsInTheAction { get { return this.cardsInTheAction; } }
     }
+    ///<summary>
+    /// Clase que representa un jugador de la partida
+    /// <para> Cada jugador tiene un nombre, un id y una lista de estrategias</para>
+    /// <para> Contiene una lista de estrategias</para>
+    /// </summary> 
     public class Player
     {
         private List<IStrategy> strategies;
         private string name;
         private int ID_;
-        private Move move;
-        private State state;
+        // private Move move;
+        // private State state;
 
-        protected Player(string name, int ID, State state, List<IStrategy> strategies)
+        ///<summary>
+        /// Constructor de la clase Player
+        /// </summary>
+        /// <param name="name">Nombre del jugador</param>
+        /// <param name="ID">ID del jugador</param>
+        /// <param name="strategies">Lista de estrategias del jugador</param>
+        public Player(string name, int ID/*, State state*/, List<IStrategy> strategies)
         {
             this.name = name;
             this.ID_ = ID;
-            this.state = state;
+            // this.state = state;
             this.strategies = strategies;
         }
         public string Name { get { return this.name; } }
         public int ID { get { return this.ID_; } }
-        public Move Move_ { get { return this.move; } }
+        // public Move Move_ { get { return this.move; } }
         public virtual Move Jugada(State state) //las jugadas que hará el jugador
         {
             return this.strategies[0].Play(state);
         }
     }
-    public class Greedy : IStrategy
-    {
         //private State state;
+    public class Greedy : IStrategy
+{
         private Rules rules;
         private int playerID;
         public Greedy(Rules rules, int playerID)
@@ -856,74 +890,80 @@ namespace ProeliumEngine
             this.rules = rules;
             this.playerID = playerID;
         }
-
-        public Move Play(State state)
+    public Move Play(State state)
+    {
+        bool yaInvocó = false;
+        if (state.ActualPhase == PhasesEnum.mainPhase)
         {
-            bool yaInvocó = false;
-            if (state.ActualPhase == PhasesEnum.mainPhase)
+            if (state.GetHand(playerID).Count! > 0)
             {
-                if (state.GetHand(playerID).Count! > 0)
+                foreach (Card card in state.GetHand(playerID))
                 {
-                    foreach (Card card in state.GetHand(playerID))
+                    List<Card> invokedCard = new List<Card> { card };
+                    if (rules.IsValidInvoke(playerID, state, new Move(ActionsEnum.invoke, invokedCard)))
                     {
-                        List<Card> invokedCard = new List<Card> { card };
-                        if (this.rules.IsValidInvoke(this.playerID, state, new Move(ActionsEnum.invoke, invokedCard)))
-                        {
-                            yaInvocó = true;
-                            return new Move(ActionsEnum.invoke, invokedCard);
-                        }
+                        yaInvocó = true;
+                        return new Move(ActionsEnum.invoke, invokedCard);
                     }
-                    if (!yaInvocó) return new Move(ActionsEnum.endPhase);
                 }
+                if (!yaInvocó) return new Move(ActionsEnum.endPhase);
             }
-            if (state.ActualPhase == PhasesEnum.battlePhase)
+        }
+        if (state.ActualPhase == PhasesEnum.battlePhase)
+        {
+            if (state.Table.GetMonsterCardsInvokeds(playerID).Count == 0) return new Move(ActionsEnum.endPhase);
+            foreach (List<Card> cards in state.Table.MonsterCardsInvokeds)
             {
-                if (state.Table.GetMonsterCardsInvokeds(playerID).Count == 0) return new Move(ActionsEnum.endPhase);
-                foreach (List<Card> cards in state.Table.MonsterCardsInvokeds)
+                if (state.Table.MonsterCardsInvokeds.IndexOf(cards) != playerID)
                 {
-                    if (state.Table.MonsterCardsInvokeds.IndexOf(cards) != playerID)
+                    if (cards.Count == 0)
                     {
-                        for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(this.playerID).Count; i++)
+                        for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(playerID).Count; i++)
                         {
-                            if (!state.GetYaAtacó(this.playerID)[i])
+                            if (!state.GetYaAtacó(playerID)[i])
                             {
-                                if (cards.Count == 0)
-                                {
-                                    List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(this.playerID)[i] };
-                                    if (this.rules.IsValidAttackPointsLife(state, this.playerID, new Move(ActionsEnum.attackLifePoints, actionCards))) return new Move(ActionsEnum.attackLifePoints, actionCards);
-                                    else continue;
-                                }
-                                else
-                                {
-                                    List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(this.playerID)[i], cards[cards.Count - 1] };
-                                    if (this.rules.IsValidAttack(state, this.playerID, new Move(ActionsEnum.attackCard, actionCards))) return new Move(ActionsEnum.attackCard, actionCards);
-                                }
+                                List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(playerID)[i] };
+                                if (rules.IsValidAttackPointsLife(state, playerID, new Move(ActionsEnum.attackLifePoints, actionCards))) return new Move(ActionsEnum.attackLifePoints, actionCards);
+                                else continue;
                             }
                         }
-                        if (this.rules.IsValidMove(new Move(ActionsEnum.endPhase), state.ActualPhase, this.playerID, state)) return new Move(ActionsEnum.endPhase);
                     }
-                }
-            }
-            if (state.ActualPhase == PhasesEnum.endPhase)
-            {
-                if (state.GetHand(playerID).Count! > 0)
-                {
-                    foreach (Card card in state.GetHand(playerID))
+                    else
                     {
-                        List<Card> actionCard = new List<Card> { card };
-                        if (this.rules.IsValidInvoke(this.playerID, state, new Move(ActionsEnum.invoke, actionCard)))
+                        for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(playerID).Count; i++)
                         {
-                            yaInvocó = true;
-                            List<Card> invokedCard = new List<Card> { card };
-                            return new Move(ActionsEnum.invoke, invokedCard);
+                            if (!state.GetYaAtacó(playerID)[i])
+                            {
+                                List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(playerID)[i], cards[cards.Count - 1] };
+                                if (rules.IsValidAttack(state, playerID, new Move(ActionsEnum.attackCard, actionCards))) return new Move(ActionsEnum.attackCard, actionCards);
+                            }
                         }
                     }
-                    if (!yaInvocó) return new Move(ActionsEnum.endPhase);
+                    if (rules.IsValidMove(new Move(ActionsEnum.endPhase), state.ActualPhase, playerID, state)) return new Move(ActionsEnum.endPhase);
                 }
             }
-            return new Move(ActionsEnum.endPhase);
         }
+        if (state.ActualPhase == PhasesEnum.endPhase)
+        {
+            if (state.GetHand(playerID).Count! > 0)
+            {
+                foreach (Card card in state.GetHand(playerID))
+                {
+                    List<Card> actionCard = new List<Card> { card };
+                    if (rules.IsValidInvoke(playerID, state, new Move(ActionsEnum.invoke, actionCard)))
+                    {
+                        yaInvocó = true;
+                        List<Card> invokedCard = new List<Card> { card };
+                        return new Move(ActionsEnum.invoke, invokedCard);
+                    }
+                }
+                if (!yaInvocó) return new Move(ActionsEnum.endPhase);
+            }
+        }
+        return new Move(ActionsEnum.endPhase);
     }
+}
+
 
     #endregion Players
 }

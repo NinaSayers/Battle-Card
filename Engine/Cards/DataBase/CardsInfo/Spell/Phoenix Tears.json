@@ -1,0 +1,1 @@
+{"CardName":"Phoenix Tears","strEffect":"if PlayerID idemI 0 then Player1.life creace 2; if PlayerID idemI 1 then Player2.life creace 2;"}

@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ExpEvaluator;
+using Cards;
 
-namespace Cards;
 
 public class Creator
 {
@@ -33,20 +33,20 @@ public class Creator
     static void MainMenu()
     {
         System.Console.WriteLine();
-        System.Console.WriteLine("Select an opcion/n");
-        System.Console.WriteLine("1 Create a Spell Card");
-        System.Console.WriteLine("2 Create a Monster Card");
-        System.Console.WriteLine("3 Search Card");
-        System.Console.WriteLine("4 Quit");
+        System.Console.WriteLine("Select an opcion\n");
+        System.Console.WriteLine("𝟏 Create a Spell Card");
+        System.Console.WriteLine("𝟐 Create a Monster Card");
+        System.Console.WriteLine("𝟑 Search Card");
+        System.Console.WriteLine("𝟒 Quit");
     }
 
     static void CardsMenu()
     {
         System.Console.WriteLine();
-        System.Console.WriteLine("Select a Card Type");
-        System.Console.WriteLine("1 Spell Card");
-        System.Console.WriteLine("2 Monster Card");
-        System.Console.WriteLine("3 Back");
+        System.Console.WriteLine("Select a Card Type\n");
+        System.Console.WriteLine("𝟏 Spell Card");
+        System.Console.WriteLine("𝟐 Monster Card");
+        System.Console.WriteLine("𝟑 Back");
     }
 
 
@@ -80,10 +80,9 @@ public class Creator
                 goto Effect;
             }
 
-            var card = new SpellCard
+            var card = new SpellCardInfo
             {
                 CardName = cardName,
-                Description = description,
                 strEffect = effect
             };
 
@@ -91,7 +90,7 @@ public class Creator
             string jsonString = JsonSerializer.Serialize(card);
             File.WriteAllText(filename, jsonString);
         }
-        else if(entry == 2)
+        if(entry == 2)
         {
             Console.Clear();
 
@@ -111,9 +110,9 @@ public class Creator
             System.Console.Write("Enter the card health : ");
             int health = int.Parse(Console.ReadLine()??"0");
 
-            System.Console.WriteLine();
-            System.Console.Write("Enter the card description : ");
-            string? description = Console.ReadLine();
+            // System.Console.WriteLine();
+            // System.Console.Write("Enter the card description : ");
+            // string? description = Console.ReadLine();
             
             Effect:
             System.Console.WriteLine();
@@ -130,13 +129,11 @@ public class Creator
                 goto Effect;
             }
 
-            var card = new MonsterCard
-            {
+            var card = new MonsterCardInfo{
                 CardName = cardName,
                 Attack = attack,
                 Defense = defense,
                 Health = health,
-                Description = description,
                 strEffect = effect
             };
 
@@ -187,7 +184,7 @@ public class Creator
 
             foreach(var str in path)
             {
-                System.Console.WriteLine($"{j} {str}");
+                System.Console.WriteLine($"{j++} {str}");
             }
 
             System.Console.WriteLine();
@@ -209,13 +206,12 @@ public class Creator
 
             foreach(var str in path)
             {
-                System.Console.WriteLine($"{j} {str}");
+                System.Console.WriteLine($"{j++} {str}");
             }
 
             System.Console.WriteLine();
             System.Console.WriteLine("Press a key to go back");
             Console.ReadLine();
-
         }
 
         System.Console.WriteLine("Is not a valid option");

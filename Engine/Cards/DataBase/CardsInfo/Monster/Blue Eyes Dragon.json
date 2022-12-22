@@ -1,0 +1,1 @@
+{"CardName":"Blue Eyes Dragon","Health":2700,"Attack":3000,"Defense":2500,"strEffect":"if PlayerID idemI 0 then Player1.Monsters[0].Life creace 300; if PlayerID idemI 1 then Player2.Monsters[0].Life creace 300;\u0013\u0013\u0013\u0013\u0013\u0013\u0013\u0013\u0013\u0013\u0013\u0013\u0013"}

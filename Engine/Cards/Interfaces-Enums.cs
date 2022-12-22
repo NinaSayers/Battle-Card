@@ -84,10 +84,15 @@ namespace ProeliumEngine
     {
         public int id { get; }
     }
-    public interface IStrategy 
+    public interface IStrategy //CONVERTIR ESTO A UN DELEGADO que reciba la info del juego y devuelva un Move
     {
         public Move Play(State state);
     }
     #endregion Players
+
+
+
+
+
 
 }

@@ -129,6 +129,10 @@ public class Token
         {
             return Symbol.Concat;
         }
+        if(value == ";")
+        {
+            return Symbol.EOI;
+        }
         if(value == "null")
         {
             return Symbol.Invalid;
@@ -142,9 +146,15 @@ public class Token
         string [] tokens = new string []
         {
             "if","then","idem","plus","minus","mult","div","maior","minor","idemI","dist","minorI","maiorI","(",")"
-            ,"Player1.life","Player2.life","x"
+            ,"Player1.life","Player2.life","PlayerID","Player1.Monsters[0].Name","Player1.Monsters[0].Attack",
+            "Player1.Monsters[1].Attack","Player1.Monsters[2].Attack","Player2.Monsters[0].Attack", 
+            "Player2.Monsters[1].Attack","Player2.Monsters[2].Attack","Player1.Monsters[0].Defense",
+            "Player1.Monsters[1].Defense","Player1.Monsters[2].Defense","Player2.Monsters[0].Defense",
+            "Player2.Monsters[1].Defense","Player2.Monsters[2].Defense","Player1.Monsters[0].Life",
+            "Player1.Monsters[1].Life","Player1.Monsters[2].Life","Player2.Monsters[0].Life",
+            "Player2.Monsters[1].Life","Player2.Monsters[2].Life"
             ,"creace","decreace","while","do",
-            ","
+            ",",";"
         };
         foreach(string st in tokens)
         {

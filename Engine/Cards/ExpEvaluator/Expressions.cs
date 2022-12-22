@@ -80,7 +80,7 @@ public class Variable : Expression
 
     public override double Evaluate()
     {
-        return Program.variables[name];
+        return Programa.doubleVar[name];
     }
     public override string ToString()
     {

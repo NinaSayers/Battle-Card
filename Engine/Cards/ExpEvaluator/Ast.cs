@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ExpEvaluator;
 
-public enum Symbol { E, T, Add, Sub, Mult, Div, Asg, i, If, Then, Menor, Mayor, MenorI, MayorI, Igual, Dist, Invalid, Open, Close, Creace, Decreace , While, Do, X, Concat, S}
+public enum Symbol { E, T, Add, Sub, Mult, Div, Asg, i, If, Then, Menor, Mayor, MenorI, MayorI, Igual, Dist, Invalid, Open, Close, Creace, Decreace , While, Do, X, Concat, S, EOI, Or, And}
 public class Node
 {
     public Symbol id;
@@ -22,15 +22,15 @@ public class Node
         {
             if(children[1].id >= Symbol.Add && children[1].id <= Symbol.Div)
             {
-                return new BinaryExpression(children[0].GetAST() as Expression, children[2].GetAST() as Expression, SymbolNames[children[1].id]);
+                return new BinaryExpression((children[0].GetAST() as Expression)!, (children[2].GetAST() as Expression)!, Names.SymbolNames[children[1].id]);
             }
             if(children[1].id >= Symbol.Menor && children[1].id <= Symbol.Dist)
             {
-                return new BinaryBooleanExpression(children[0].GetAST() as Expression,children[2].GetAST() as Expression,SymbolNames[children[1].id]);
+                return new BinaryBooleanExpression((children[0].GetAST() as Expression)!, (children[2].GetAST() as Expression)!, Names.SymbolNames[children[1].id]);
             }
             if(children[1].id == Symbol.Asg || children[1].id >= Symbol.Creace && children[1].id <= Symbol.Decreace)
             {
-                return new Assign(children[0].token.Value, children[2].GetAST() as Expression, SymbolNames[children[1].id]);
+                return new Assign(children[0].token.Value, (children[2].GetAST() as Expression)!, Names.SymbolNames[children[1].id]);
             }
         }
         else if(id == Symbol.S)
@@ -48,11 +48,11 @@ public class Node
         }
         else if(id == Symbol.If)
         {
-            return new Conditional(children[0].GetAST() as BooleanExpression, children[1].GetAST());
+            return new Conditional((children[0].GetAST() as BooleanExpression)!, children[1].GetAST());
         }
         else if(id == Symbol.While)
         {
-            return new While(children[0].GetAST() as BooleanExpression,children[1].GetAST());
+            return new While((children[0].GetAST() as BooleanExpression)!,children[1].GetAST());
         }
         else if(children.Count() == 0 && id == Symbol.i)
         {
@@ -74,7 +74,11 @@ public class Node
         throw new Exception("The Parse Tree Is Invalid");
     }
 
-    public readonly Dictionary<Symbol, string> SymbolNames = new Dictionary<Symbol, string>()
+}
+public class Names
+{
+
+    public static readonly Dictionary<Symbol, string> SymbolNames = new Dictionary<Symbol, string>()
     {
         {Symbol.Add, "+"},
         {Symbol.Sub, "-"},

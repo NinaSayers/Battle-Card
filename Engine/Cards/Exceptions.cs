@@ -4,7 +4,7 @@ namespace ProeliumEngine
     { 
         public static void InvalidPlayerIDException(int playerID, int maxCount)
         {
-            if (playerID < 0 || playerID >= maxCount)
+            if (playerID < 0 || playerID > maxCount)
             {
                 throw new InvalidPlayerIDException("Invalid player ID. Try again");
             } 

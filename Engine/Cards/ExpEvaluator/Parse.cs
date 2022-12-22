@@ -77,9 +77,28 @@ public class Parser
                 {
                     Node temp = Parse(list, i+1, new List<Node>(), j);
                     result.Add(temp);
-                    temp = Parse(list, j+1, new List<Node>(), list.Count());
+                    int newTop = 0;
+                    for(int k = j; k < list.Count; k++)
+                    {
+                        if(list[k].id == Symbol.EOI)
+                        {
+                            newTop = k;
+                            break;
+                        }
+                    }
+                    if(newTop == 0)
+                    {
+                        newTop = list.Count;
+                    temp = Parse(list, j+1, new List<Node>(), newTop);
                     result.Add(temp);
                     return new Node(Symbol.If, result, new Token("null"));
+                    }
+                    temp = Parse(list, j+1, new List<Node>(), newTop);
+                    result.Add(temp);
+                    result = new List<Node>{new Node(Symbol.If, result, new Token("null"))};
+                    i = newTop;
+                    break;
+
                 }
             }
         }
@@ -89,11 +108,29 @@ public class Parser
             {
                 if(list[j].id == Symbol.Do)
                 {
-                    Node temp = Parse(list, i+1, new List<Node>(), j);
+                     Node temp = Parse(list, i+1, new List<Node>(), j);
                     result.Add(temp);
-                    temp = Parse(list, j+1, new List<Node>(), list.Count());
+                    int newTop = 0;
+                    for(int k = j; k < list.Count; k++)
+                    {
+                        if(list[k].id == Symbol.EOI)
+                        {
+                            newTop = k;
+                            break;
+                        }
+                    }
+                    if(newTop == 0)
+                    {
+                        newTop = list.Count;
+                    temp = Parse(list, j+1, new List<Node>(), newTop);
                     result.Add(temp);
                     return new Node(Symbol.While, result, new Token("null"));
+                    }
+                    temp = Parse(list, j+1, new List<Node>(), newTop);
+                    result.Add(temp);
+                    result = new List<Node>{new Node(Symbol.While, result, new Token("null"))};
+                    i = newTop;
+                    break;
                 }
             }
         }
@@ -101,12 +138,29 @@ public class Parser
         {
             List<Node> newList = new List<Node>();
 
-            Node actualResult = new Node(Symbol.T, result, new Token("null"));
-            newList.Add(actualResult);
-            Node temp = Parse(list, i+1, new List<Node>(), top);
-            newList.Add(temp);
-            
-            return new Node(Symbol.S, newList, new Token("null"));
+            int newTop = top;
+            for(int j = i; j < top; j++)
+            {
+                if(list[j].id == Symbol.EOI)
+                {
+                    newTop = j;
+                    break;
+                }
+            }
+            Node temp = Parse(list, i+1, new List<Node>(), newTop);
+
+            result.Add(temp);
+            if(newTop == top)
+            {
+                return new Node(Symbol.S, result, new Token("null"));
+            }
+            else
+            {
+                List<Node> newList2 = new List<Node>();
+                newList2.Add(new Node(Symbol.S, result, new Token("null")));
+                result = newList2;
+                i = newTop;
+            }
         }
         
         if(list[i].id == Symbol.Sub)
@@ -120,6 +174,18 @@ public class Parser
             result.Add(new Node(list[i].id, new List<Node>(), list[i]));
             result.Add(new Node(list[i+1].id, new List<Node>(), list[i+1]));
             i ++;
+        }
+        
+        if(list[i].id == Symbol.EOI && i < list.Count-1)
+        {
+            List<Node> newList = new List<Node>();
+
+            
+            Node temp = Parse(list, i+1, new List<Node>(), top);
+            result.Add(temp);
+            
+            return new Node(Symbol.S, result, new Token("null"));
+            
         }
 
         return Parse(list, i+1, result, top);
