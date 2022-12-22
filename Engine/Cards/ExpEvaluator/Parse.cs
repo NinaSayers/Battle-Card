@@ -134,6 +134,35 @@ public class Parser
                 }
             }
         }
+        if(list[i].id == Symbol.Draw)
+        {
+            Node temp = Parse(list, i+1, new List<Node>(), top);
+            result.Add(temp);
+            int newTop = 0;
+            for(int k = i; k < list.Count; k++)
+            {
+                if(list[k].id == Symbol.EOI)
+                {
+                    newTop = k;
+                    break;
+                }
+            }
+            if(newTop == 0)
+            {
+                newTop = list.Count;
+            temp = Parse(list, i+1, new List<Node>(), newTop);
+            result.Add(temp);
+            return new Node(Symbol.Draw, result, new Token("null"));
+            }
+            temp = Parse(list, i+1, new List<Node>(), newTop);
+            result.Add(temp);
+            result = new List<Node>{new Node(Symbol.Draw, result, new Token("null"))};
+            i = newTop;     
+        }
+        if(list[i].id == Symbol.Mix)
+        {
+            result.Add(new Node(list[i].id, new List<Node>(), list[i]));
+        }
         if(list[i].id == Symbol.Concat)
         {
             List<Node> newList = new List<Node>();

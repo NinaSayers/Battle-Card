@@ -4,31 +4,31 @@ public class Programa
 {
     public static State state;
 
-    public static Dictionary<string, double> doubleVar;
-    public static Dictionary<string, string> stringVar;
+    public static Dictionary<string, double> doubleVar = new Dictionary<string, double>();
+    public static Dictionary<string, string> stringVar = new Dictionary<string, string>();
     public static int PlayerID;
     public static void UpdateState()
     {
         state.LifePoints[0] = (float) doubleVar["Player1.life"];
         state.LifePoints[1] = (float) doubleVar["Player2.life"];
-        (state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player1.Monsters[0].Attack"]);
-        (state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player1.Monsters[1].Attack"]);
-        (state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player1.Monsters[2].Attack"]);
-        (state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player2.Monsters[0].Attack"]);
-        (state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player2.Monsters[1].Attack"]);
-        (state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player2.Monsters[2].Attack"]);
-        (state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player1.Monsters[0].Defense"]);
-        (state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player1.Monsters[1].Defense"]);
-        (state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player1.Monsters[2].Defense"]);
-        (state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player2.Monsters[0].Defense"]);
-        (state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player2.Monsters[1].Defense"]);
-        (state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player2.Monsters[2].Defense"]);
-        (state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!.SetLife(1, (float)doubleVar["Player1.Monsters[0].Life"]);
-        (state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!.SetLife(1, (float)doubleVar["Player1.Monsters[1].Life"]);
-        (state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!.SetLife(1, (float)doubleVar["Player1.Monsters[2].Life"]);
-        (state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!.SetLife(1, (float)doubleVar["Player2.Monsters[0].Life"]);
-        (state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!.SetLife(1, (float)doubleVar["Player2.Monsters[1].Life"]);
-        (state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!.SetLife(1, (float)doubleVar["Player2.Monsters[2].Life"]);
+        // (state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player1.Monsters[0].Attack"]);
+        // (state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player1.Monsters[1].Attack"]);
+        // (state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player1.Monsters[2].Attack"]);
+        // (state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player2.Monsters[0].Attack"]);
+        // (state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player2.Monsters[1].Attack"]);
+        // (state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!.SetAttack(1, (float)doubleVar["Player2.Monsters[2].Attack"]);
+        // (state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player1.Monsters[0].Defense"]);
+        // (state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player1.Monsters[1].Defense"]);
+        // (state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player1.Monsters[2].Defense"]);
+        // (state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player2.Monsters[0].Defense"]);
+        // (state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player2.Monsters[1].Defense"]);
+        // (state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!.SetDefense(1, (float)doubleVar["Player2.Monsters[2].Defense"]);
+        // (state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!.SetLife(1, (float)doubleVar["Player1.Monsters[0].Life"]);
+        // (state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!.SetLife(1, (float)doubleVar["Player1.Monsters[1].Life"]);
+        // (state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!.SetLife(1, (float)doubleVar["Player1.Monsters[2].Life"]);
+        // (state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!.SetLife(1, (float)doubleVar["Player2.Monsters[0].Life"]);
+        // (state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!.SetLife(1, (float)doubleVar["Player2.Monsters[1].Life"]);
+        // (state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!.SetLife(1, (float)doubleVar["Player2.Monsters[2].Life"]);
 
     }
 }
@@ -43,37 +43,37 @@ public class Statement
             {"Player1.life", state.LifePoints[0]}
             ,{"Player2.life", state.LifePoints[1]}
             ,{"PlayerID", playerID}
-            ,{"Player1.Monsters[0].Attack", ((state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!).Attack}
-            ,{"Player1.Monsters[1].Attack", ((state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!).Attack}
-            ,{"Player1.Monsters[2].Attack", ((state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!).Attack}
-            ,{"Player2.Monsters[0].Attack", ((state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!).Attack}
-            ,{"Player2.Monsters[1].Attack", ((state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!).Attack}
-            ,{"Player2.Monsters[2].Attack", ((state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!).Attack}
-            ,{"Player1.Monsters[0].Defense", ((state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!).Defense}
-            ,{"Player1.Monsters[1].Defense", ((state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!).Defense}
-            ,{"Player1.Monsters[2].Defense", ((state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!).Defense}
-            ,{"Player2.Monsters[0].Defense", ((state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!).Defense}
-            ,{"Player2.Monsters[1].Defense", ((state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!).Defense}
-            ,{"Player2.Monsters[2].Defense", ((state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!).Defense}
-            ,{"Player1.Monsters[0].Life", ((state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!).Life}
-            ,{"Player1.Monsters[1].Life", ((state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!).Life}
-            ,{"Player1.Monsters[2].Life", ((state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!).Life}
-            ,{"Player2.Monsters[0].Life", ((state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!).Life}
-            ,{"Player2.Monsters[1].Life", ((state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!).Life}
-            ,{"Player2.Monsters[2].Life", ((state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!).Life}
+            // ,{"Player1.Monsters[0].Attack", ((state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!).Attack}
+            // ,{"Player1.Monsters[1].Attack", ((state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!).Attack}
+            // ,{"Player1.Monsters[2].Attack", ((state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!).Attack}
+            // ,{"Player2.Monsters[0].Attack", ((state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!).Attack}
+            // ,{"Player2.Monsters[1].Attack", ((state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!).Attack}
+            // ,{"Player2.Monsters[2].Attack", ((state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!).Attack}
+            // ,{"Player1.Monsters[0].Defense", ((state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!).Defense}
+            // ,{"Player1.Monsters[1].Defense", ((state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!).Defense}
+            // ,{"Player1.Monsters[2].Defense", ((state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!).Defense}
+            // ,{"Player2.Monsters[0].Defense", ((state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!).Defense}
+            // ,{"Player2.Monsters[1].Defense", ((state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!).Defense}
+            // ,{"Player2.Monsters[2].Defense", ((state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!).Defense}
+            // ,{"Player1.Monsters[0].Life", ((state.Table.MonsterCardsInvokeds[0][0] as MonsterCard)!).Life}
+            // ,{"Player1.Monsters[1].Life", ((state.Table.MonsterCardsInvokeds[0][1] as MonsterCard)!).Life}
+            // ,{"Player1.Monsters[2].Life", ((state.Table.MonsterCardsInvokeds[0][2] as MonsterCard)!).Life}
+            // ,{"Player2.Monsters[0].Life", ((state.Table.MonsterCardsInvokeds[1][0] as MonsterCard)!).Life}
+            // ,{"Player2.Monsters[1].Life", ((state.Table.MonsterCardsInvokeds[1][1] as MonsterCard)!).Life}
+            // ,{"Player2.Monsters[2].Life", ((state.Table.MonsterCardsInvokeds[1][2] as MonsterCard)!).Life}
 
         };
 
-        Programa.stringVar = new Dictionary<string, string>
-        {
-            {"Player1.Monsters[0].Name", state.Table.MonsterCardsInvokeds[0][0].Name}
-            ,{"Player1.Monsters[1].Name", state.Table.MonsterCardsInvokeds[0][1].Name}
-            ,{"Player1.Monsters[2].Name", state.Table.MonsterCardsInvokeds[0][2].Name}
-            ,{"Player2.Monsters[0].Name", state.Table.MonsterCardsInvokeds[1][0].Name}
-            ,{"Player2.Monsters[1].Name", state.Table.MonsterCardsInvokeds[1][1].Name}
-            ,{"Player2.Monsters[2].Name", state.Table.MonsterCardsInvokeds[1][2].Name}
+        // Programa.stringVar = new Dictionary<string, string>
+        // {
+        //     {"Player1.Monsters[0].Name", state.Table.MonsterCardsInvokeds[0][0].Name}
+        //     ,{"Player1.Monsters[1].Name", state.Table.MonsterCardsInvokeds[0][1].Name}
+        //     ,{"Player1.Monsters[2].Name", state.Table.MonsterCardsInvokeds[0][2].Name}
+        //     ,{"Player2.Monsters[0].Name", state.Table.MonsterCardsInvokeds[1][0].Name}
+        //     ,{"Player2.Monsters[1].Name", state.Table.MonsterCardsInvokeds[1][1].Name}
+        //     ,{"Player2.Monsters[2].Name", state.Table.MonsterCardsInvokeds[1][2].Name}
 
-        };
+        // };
         Execute();
         Programa.UpdateState();
         return Programa.state;
@@ -173,6 +173,50 @@ public class Concat : Statement
     public override string ToString()
     {
         return $"";
+    }
+}
+
+public class Draw : Statement
+{
+    public Expression expression;
+
+    public Draw(Expression expression)
+    {
+        this.expression = expression;
+    }
+
+    public override void Execute()
+    {
+        double times = expression.Evaluate();
+        Actions draw = new Actions(1);
+
+        for (int i = 0; i < times; i++)
+        {
+            Programa.state = draw.Draw(Programa.PlayerID, 1, Programa.state);
+        }
+    }
+
+    public override string ToString()
+    {
+        return "Draw " + expression.ToString();
+    }
+}
+
+public class Mix : Statement
+{
+
+    public Mix(){}
+
+    public override void Execute()
+    {
+        Actions mix = new Actions(1);
+
+        Programa.state = mix.Mix(Programa.PlayerID, 1, Programa.state);
+    }
+
+    public override string ToString()
+    {
+        return "Mix";
     }
 }
 

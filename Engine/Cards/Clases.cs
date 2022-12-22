@@ -130,6 +130,9 @@ namespace ProeliumEngine
                 case ActionsEnum.discard:
                     this.state = this.actions.Discard(this.gameID, player.ID, jugada.CardsInTheAction[0], state);
                     break;
+                case ActionsEnum.activateEffect:
+                    this.state = jugada.CardsInTheAction[0].EffectExecute(state, player.ID);
+                    break;
             }
             return;
         }
@@ -222,18 +225,20 @@ namespace ProeliumEngine
             bool yaAtacó = false;
             State newState = new State(state.GameTurns, state.TurnsByPlayer, state.ActualPhase, state.Players, state.Hands, state.YaAtacó, state.Table, this.gameID, state.LifePoints);
 
-            foreach (List<Card> invokedMonsterCards in state.Table.MonsterCardsInvokeds)
+            for (int i =0; i < state.Table.MonsterCardsInvokeds.Count; i++)
             {
+                List<Card> invokedMonsterCards = state.Table.MonsterCardsInvokeds[i];
                 if (newState.Table.MonsterCardsInvokeds.IndexOf(invokedMonsterCards) != attackantPlayerID)
                 {
                     MyExceptions.NoFoundedCardException(invokedMonsterCards, cardAtacada, "Esta carta no está invocada por el jugador contrario.");
-                    foreach (MonsterCard monsterCard in invokedMonsterCards)
+                    for( int j = 0; j < invokedMonsterCards.Count; j++)
                     {
+                        var monsterCard = invokedMonsterCards[j];
                         if ((monsterCard == cardAtacada) && (!yaAtacó))
                         {
                             yaAtacó = true;
                             newState.MarkYaAtacó(this.gameID, attackantPlayerID, cardAtacante);
-                            if (monsterCard.Defense <= 0)
+                            if ((monsterCard as MonsterCard)!.Defense <= 0)
                             {
                                 newState.Table.AddCardToCemetery(this.gameID, monsterCard);
                                 newState.RemoveYaAtacó(this.gameID, newState.Table.MonsterCardsInvokeds.IndexOf(invokedMonsterCards));
@@ -242,9 +247,9 @@ namespace ProeliumEngine
                             }
                             else
                             {
-                                float damage = (cardAtacante as MonsterCard).Attack * 1000 / monsterCard.Defense;
-                                monsterCard.SetLife(this.gameID, monsterCard.Life - damage);
-                                if (monsterCard.Life <= 0)
+                                float damage = (cardAtacante as MonsterCard)!.Attack * 1000 / (monsterCard as MonsterCard)!.Defense;
+                                (monsterCard as MonsterCard)!.SetLife(this.gameID, (monsterCard as MonsterCard)!.Life - damage);
+                                if ((monsterCard as MonsterCard)!.Life <= 0)
                                 {
                                     newState.Table.AddCardToCemetery(this.gameID, monsterCard);
                                     invokedMonsterCards.Remove(monsterCard);
@@ -702,9 +707,9 @@ namespace ProeliumEngine
              }
 
          }*/
-        public List<Player>? GetWinner(State state)
+        public List<Player> GetWinner(State state)
         {
-            List<Player>? result = null;
+            List<Player> result = new List<Player>();
             if (IsEndGame(state))
             {
                 result = new List<Player>();
@@ -713,22 +718,23 @@ namespace ProeliumEngine
                 int countDeckPlayer_1 = state.Table.Decks[0].Count;
                 int countDeckPlayer_2 = state.Table.Decks[1].Count;
 
-                if ((lifesPlayer_1 == 0 || countDeckPlayer_1 == 0) && (lifesPlayer_2 > 0 && countDeckPlayer_2 != 0))
+                if (lifesPlayer_1 < lifesPlayer_2 || countDeckPlayer_1 == 0 && countDeckPlayer_2 != 0 && lifesPlayer_2 > 0)
                 {
                     // result = new List<Player>();
-                    result.Add(state.Players[0]);
+                    // result.Add(state.Players[0]);
                     result.Add(state.Players[1]);
                 }
-                else if ((lifesPlayer_2 == 0 || countDeckPlayer_2 == 0) && (lifesPlayer_1 > 0 && countDeckPlayer_1 != 0))
+                else if (lifesPlayer_2 < lifesPlayer_1 || countDeckPlayer_2 == 0 &&  countDeckPlayer_1 != 0 && lifesPlayer_1 > 0)
                 {
                     // result = new List<Player>();
-                    result.Add(state.Players[1]);
+                    // result.Add(state.Players[1]);
                     result.Add(state.Players[0]);
                 }
                 else
                 {
                     // result = new List<Player>();
                     result.Add(state.Players[0]);
+                    result.Add(state.Players[1]);
                 }
                 return result;
             }

@@ -125,6 +125,14 @@ public class Token
         {
             return Symbol.Do;
         }
+        if(value == "draw")
+        {
+            return Symbol.Draw;
+        }
+        if(value == "mix")
+        {
+            return Symbol.Mix;
+        }
         if(value == ",")
         {
             return Symbol.Concat;
@@ -153,7 +161,7 @@ public class Token
             "Player2.Monsters[1].Defense","Player2.Monsters[2].Defense","Player1.Monsters[0].Life",
             "Player1.Monsters[1].Life","Player1.Monsters[2].Life","Player2.Monsters[0].Life",
             "Player2.Monsters[1].Life","Player2.Monsters[2].Life"
-            ,"creace","decreace","while","do",
+            ,"creace","decreace","while","do","draw","mix",
             ",",";"
         };
         foreach(string st in tokens)

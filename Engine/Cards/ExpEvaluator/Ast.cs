@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ExpEvaluator;
 
-public enum Symbol { E, T, Add, Sub, Mult, Div, Asg, i, If, Then, Menor, Mayor, MenorI, MayorI, Igual, Dist, Invalid, Open, Close, Creace, Decreace , While, Do, X, Concat, S, EOI, Or, And}
+public enum Symbol { E, T, Add, Sub, Mult, Div, Asg, i, If, Then, Menor, Mayor, MenorI, MayorI, Igual, Dist, Invalid, Open, Close, Creace, Decreace , While, Do, X, Concat, S, EOI, Or, And, Draw, Mix}
 public class Node
 {
     public Symbol id;
@@ -61,6 +61,14 @@ public class Node
         else if(children.Count() == 0 && id == Symbol.X)
         {
             return new Variable(token.Value);
+        }
+        else if(id == Symbol.Mix)
+        {
+            return new Mix();
+        }
+        else if(id == Symbol.Draw)
+        {
+            return new Draw((children[0].GetAST() as Expression)!);
         }
 
         System.Console.WriteLine($"this node id = {id} and children count = {children.Count()}");

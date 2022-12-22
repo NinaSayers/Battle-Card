@@ -56,6 +56,7 @@ namespace ProeliumEngine
     #region Cards
     public enum ActionsEnum 
     {
+       activateEffect,
        mix,
        invoke,
        attackCard,

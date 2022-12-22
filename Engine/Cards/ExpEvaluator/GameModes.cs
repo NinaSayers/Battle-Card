@@ -5,35 +5,54 @@ public class GameModes
 {
     public static void Player_vs_IA()
     {
-        State state = new State();
-        
         System.Console.Clear();
-        System.Console.WriteLine("Player vs IA");
-        List<Card> PlayerDeck = Serialize.Deserial();
-        foreach(MonsterCard s in PlayerDeck)
+        System.Console.WriteLine("PLayer vs IA");
+
+        Table table = new Table(new List<List<Card>>()
         {
-            System.Console.WriteLine(s.Attack);
+            MixCards(Serialize.Deserial()), 
+            MixCards(Serialize.Deserial())
+        }, new List<Card>(), 1);
+        Rules rules = new Rules((table.Decks[0].Count, table.Decks[1].Count), 3, 5, new State());
+        Player player1 = new Player("Player1", 0, new List<IStrategy>{ new User(rules, 0)});
+        Player player2 = new Player("Player2", 1, new List<IStrategy>{new Greedy(rules, 1)});
+        State state = new State(1, new List<int>{1,0}, PhasesEnum.mainPhase,new List<Player>{player1, player2}, new List<List<Card>>{new List<Card>(), new List<Card>()}, new List<List<bool>>{ new List<bool>(), new List<bool>()}, table, 1, new List<float>{3, 3} );
+        Game newGame = new Game(rules, new Actions(1), state, 1);
+
+        State temp = new State();
+        foreach(State actual in newGame)
+        {
+            temp = actual;
+            PrintGame(actual);
         }
-        List<Card> IADeck = Serialize.Deserial();
 
-        Game game = new Game(new Rules((PlayerDeck.Count, IADeck.Count), 3, 5, state), new Actions(0), state, 0);
-
-        game.Game_();
-        Thread.Sleep(1000);
+        PrintWinner(temp, rules);
     }
 
     public static void Player_vs_Player()
     {
-        State state = new State();
         System.Console.Clear();
-        System.Console.WriteLine("IA vs IA");
-        List<Card> PlayerDeck = Serialize.Deserial();
-        List<Card> IADeck = Serialize.Deserial();
+        System.Console.WriteLine("PLayer vs Player");
 
-        Game game = new Game(new Rules((PlayerDeck.Count, IADeck.Count), 3, 5, state), new Actions(0), state, 0);
+        Table table = new Table(new List<List<Card>>()
+        {
+            MixCards(Serialize.Deserial()), 
+            MixCards(Serialize.Deserial())
+        }, new List<Card>(), 1);
+        Rules rules = new Rules((table.Decks[0].Count, table.Decks[1].Count), 3, 5, new State());
+        Player player1 = new Player("Player1", 0, new List<IStrategy>{ new User(rules, 0)});
+        Player player2 = new Player("Player2", 1, new List<IStrategy>{new User(rules, 1)});
+        State state = new State(1, new List<int>{1,0}, PhasesEnum.mainPhase,new List<Player>{player1, player2}, new List<List<Card>>{new List<Card>(), new List<Card>()}, new List<List<bool>>{ new List<bool>(), new List<bool>()}, table, 1, new List<float>{3, 3} );
+        Game newGame = new Game(rules, new Actions(1), state, 1);
 
-        game.Game_();
-        Thread.Sleep(1000);
+        State temp = new State();
+        foreach(State actual in newGame)
+        {
+            temp = actual;
+            PrintGame(actual);
+        }
+
+        PrintWinner(temp, rules);
     }
 
     public static void IA_vs_IA()
@@ -43,8 +62,8 @@ public class GameModes
 
         Table table = new Table(new List<List<Card>>()
         {
-            Serialize.Deserial(), 
-            Serialize.Deserial()
+            MixCards(Serialize.Deserial()), 
+            MixCards(Serialize.Deserial())
         }, new List<Card>(), 1);
         Rules rules = new Rules((table.Decks[0].Count, table.Decks[1].Count), 3, 5, new State());
         Player player1 = new Player("Player1", 0, new List<IStrategy>{ new Greedy(rules, 0)});
@@ -59,15 +78,40 @@ public class GameModes
             PrintGame(actual);
         }
 
-        var win = rules.GetWinner(temp);
-        // Console.Clear();
+        PrintWinner(temp, rules);
+        
+    }
+    
+    public static List<Card> MixCards(List<Card> cards)
+    {
+        List<Card> newCards = new List<Card>();
+        Random random = new Random();
+        while(cards.Count > 0)
+        {
+            int index = random.Next(0, cards.Count);
+            newCards.Add(cards[index]);
+            cards.RemoveAt(index);
+        }
+        return newCards;
+    }
+
+    public static void Clear()
+    {
+        for(int i = 0; i< 10; i++)
+        {
+            Console.SetCursorPosition(65,4+i);
+            Console.WriteLine("                                                   ");
+        }
+    }
+    public static void PrintWinner(State state,Rules rules)
+    {
+        var win = rules.GetWinner(state);
         Console.SetCursorPosition(65,4);
         Console.ForegroundColor = ConsoleColor.Green;
         if(win.Count == 1)
         {
             System.Console.WriteLine($"{win[0].Name} ha ganado!!!");
             Thread.Sleep(5000);
-
         }
         else
         {
@@ -79,9 +123,6 @@ public class GameModes
         System.Console.WriteLine("Presiona enter para salir");
         var s = Console.ReadLine();
 
-
-        // Thread.Sleep(1000);
-        
     }
 
 
@@ -464,29 +505,30 @@ public class GameModes
 
         if(state.Table.Cemetery.Count > 0)
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.SetCursorPosition(38, 11);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(46, 11);
+            System.Console.Write($"{state.Table.Cemetery.Count}");
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(47, 11);
             System.Console.Write("█");
 
-            Console.SetCursorPosition(39, 11);
+            Console.SetCursorPosition(48, 11);
             System.Console.Write("█");
 
-            Console.SetCursorPosition(40, 11);
+            Console.SetCursorPosition(49, 11);
             System.Console.Write("█");
 
-            Console.SetCursorPosition(41, 11);
+            Console.SetCursorPosition(46, 12);
             System.Console.Write("█");
 
-            Console.SetCursorPosition(38, 12);
+            Console.SetCursorPosition(47, 12);
             System.Console.Write("█");
 
-            Console.SetCursorPosition(39, 12);
+            Console.SetCursorPosition(48, 12);
             System.Console.Write("█");
 
-            Console.SetCursorPosition(40, 12);
-            System.Console.Write("█");
-
-            Console.SetCursorPosition(41, 12);
+            Console.SetCursorPosition(49, 12);
             System.Console.Write("█");
         }
         else
@@ -517,4 +559,5 @@ public class GameModes
             System.Console.Write("█");
         }
     }
+
 }
