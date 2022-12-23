@@ -105,6 +105,7 @@ public class GameModes
     }
     public static void PrintWinner(State state,Rules rules)
     {
+        Clear();
         var win = rules.GetWinner(state);
         Console.SetCursorPosition(65,4);
         Console.ForegroundColor = ConsoleColor.Green;

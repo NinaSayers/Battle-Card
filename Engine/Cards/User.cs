@@ -11,20 +11,53 @@ public class User : IStrategy
         }
     public Move Play(State state)
     {
+        try
+        {
         if(state.ActualPhase == PhasesEnum.mainPhase)
         {
             GameModes.Clear();
             int i = PrintMainPhase();
             if(i == 1)
             {
-                var card = GetCardFromHand(state);
-                return new Move(ActionsEnum.invoke, new List<Card>{card});
+                try{
+                    var card = GetCardFromHand(state);
+                    var move = new Move(ActionsEnum.invoke, new List<Card>{card});
+
+                    if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                    return move;
+                    else
+                    {
+                        Print("Invalid move");
+
+                        return Play(state);
+                    }
+
+                }
+                catch
+                {
+                    return Play(state);
+                }
 
             }
             if(i == 2)
             {
+                try{
                 var card = GetCardFromTable(state, typeof(MagicCard));
+                Move move = new Move(ActionsEnum.activateEffect, new List<Card>{card});
+
+                if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
                 return new Move(ActionsEnum.activateEffect, new List<Card>{card});
+                else
+                {
+                    Print("Invalid move");
+
+                    return Play(state);
+                }
+                }
+                catch
+                {
+                    return Play(state);
+                }
             }
             // if(i == 3)
             // {
@@ -42,6 +75,7 @@ public class User : IStrategy
             int i = PrintBattlePhase();
             if(i == 1)
             {
+                try{
                 var card = GetCardFromTable(state, typeof(MonsterCard));
                 bool directAttack = false;
 
@@ -57,7 +91,16 @@ public class User : IStrategy
 
                 if(directAttack)
                 {
-                    return new Move(ActionsEnum.attackLifePoints, new List<Card>{card});
+                    Move move = new Move(ActionsEnum.attackLifePoints, new List<Card>{card});
+
+                    if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                    return move;
+                    else
+                    {
+                        Print("Invalid move");
+
+                        return Play(state);
+                    }
                 }
                 else
                 {
@@ -69,9 +112,23 @@ public class User : IStrategy
 
                             var objetive = SetObjetive(targets);
 
-                            return new Move(ActionsEnum.attackCard,new List<Card>{card, objetive});
+                            Move move = new Move(ActionsEnum.attackCard, new List<Card>{card});
+
+                            if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                            return move;
+                            else
+                            {
+                                Print("Invalid move");
+
+                                return Play(state);
+                            }
                         }
                     }
+                }
+                }
+                catch
+                {
+                    return Play(state);
                 }
 
             }
@@ -90,22 +147,53 @@ public class User : IStrategy
             GameModes.Clear();
             int i = PrintEndPhase();
             if(i == 1)
-            // {
-            //     return new SummonMonster();
-            // }
+            {
+                try{
+                    var card = GetCardFromHand(state);
+                    var move = new Move(ActionsEnum.invoke, new List<Card>{card});
+
+                    if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                    return move;
+                    else
+                    {
+                        Print("Jugada Invalida");
+
+                        return Play(state);
+                    }
+
+                }
+                catch
+                {
+                    return Play(state);
+                }
+
+            }
             if(i == 2)
             {
-                var card = GetCardFromTable(state, typeof(MagicCard));
-                return new Move(ActionsEnum.activateEffect, new List<Card>{card});
+                try{
+                    var card = GetCardFromTable(state, typeof(MagicCard));
+                    return new Move(ActionsEnum.activateEffect, new List<Card>{card});
+
+                }
+                catch
+                {
+                    return Play(state);
+                }
             }
             // if(i == 3)
             // {
             //     return new ShowTableState();
             // }
-            // if(i == 4)
+            if(i == 4)
             {
                 return new Move(ActionsEnum.endPhase, new List<Card>());
             }
+        }
+        }
+        catch
+        {
+            return Play(state);
+            
         }
         return new Move(ActionsEnum.endTurn, new List<Card>());
     }
@@ -125,14 +213,19 @@ public class User : IStrategy
         int j = int.Parse(Console.ReadLine());
         return targets[j-1];
     }
-
+    private void Print(string s)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.SetCursorPosition(65,3);
+        System.Console.WriteLine(s);
+    }
     private int PrintMainPhase()
     {
         Console.ForegroundColor = ConsoleColor.White;
         Console.SetCursorPosition(65,4);
-        Console.WriteLine("1 Invoke");
+        Console.WriteLine("1 Summon");
         Console.SetCursorPosition(65,5);
-        Console.WriteLine("2 Activate a spell effect");
+        Console.WriteLine("2 Activate an effect");
         Console.SetCursorPosition(65,6);
         Console.WriteLine("3 Show table state");
         Console.SetCursorPosition(65,7);

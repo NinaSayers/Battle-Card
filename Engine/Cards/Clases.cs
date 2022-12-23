@@ -65,7 +65,7 @@ namespace ProeliumEngine
                                 {
                                     if (jugada.Action == ActionsEnum.attackCard || jugada.Action == ActionsEnum.attackLifePoints)
                                     {
-                                        if (IsFullCardAttack(maskAttack)) { endPhase = true; continue; }
+                                        if (IsFullCardAttack(maskAttack)) { endPhase = true;}
                                     }
                                     if (jugada.Action == ActionsEnum.invoke)
                                     {
@@ -138,11 +138,13 @@ namespace ProeliumEngine
         }
         private bool IsFullCardAttack(bool[] cardsQueAtacaron)
         {
+            int i = cardsQueAtacaron.Count();
+            int j = 0;
             foreach (bool card in cardsQueAtacaron)
             {
-                if (card) return true;
+                if (card) j++;
             }
-            return false;
+            return i == j;
         }
     }
     public class Actions
@@ -170,15 +172,15 @@ namespace ProeliumEngine
             MyExceptions.InvalidPlayerIDException(playerID, state.Table.Decks.Count - 1);
             MyExceptions.EmptyCollectionCardsException(state.Table.GetDeck(playerID), "No hay cartas en el mazo.");
 
-            List<Card> oldDeck = new List<Card>(state.Table.GetDeck(playerID).Count);
-            oldDeck = state.Table.GetDeck(playerID);
+            // List<Card> oldDeck = new List<Card>(state.Table.GetDeck(playerID).Count);
+            List<Card>oldDeck = state.Table.GetDeck(playerID);
             List<Card> newDeck = new List<Card>(oldDeck.Count);
-            Random r = new Random();
-            for (int i = 0; i < newDeck.Count; i++)
+            Random random = new Random();
+            while(oldDeck.Count > 0)
             {
-                int n = r.Next(oldDeck.Count);
-                newDeck[i] = oldDeck[n - 1];
-                oldDeck.RemoveAt(n - 1);
+                int index = random.Next(0, oldDeck.Count);
+                newDeck.Add(oldDeck[index]);
+                oldDeck.RemoveAt(index);
             }
             State newState = new State(state.GameTurns, state.TurnsByPlayer, state.ActualPhase, state.Players, state.Hands, state.YaAtacó, state.Table, this.gameID, state.LifePoints);
             newState.Table.SetDeck(playerID, gameID, newDeck);
