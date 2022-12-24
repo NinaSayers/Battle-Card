@@ -136,12 +136,12 @@ public class Parser
         }
         if(list[i].id == Symbol.Draw)
         {
-            Node temp = Parse(list, i+1, new List<Node>(), top);
-            result.Add(temp);
+            // Node temp = Parse(list, i+1, new List<Node>(), top);
+            // result.Add(temp);
             int newTop = 0;
             for(int k = i; k < list.Count; k++)
             {
-                if(list[k].id == Symbol.EOI)
+                if(list[k].id == Symbol.EOI || list[k].id == Symbol.Concat)
                 {
                     newTop = k;
                     break;
@@ -150,14 +150,18 @@ public class Parser
             if(newTop == 0)
             {
                 newTop = list.Count;
-            temp = Parse(list, i+1, new List<Node>(), newTop);
-            result.Add(temp);
-            return new Node(Symbol.Draw, result, new Token("null"));
+                Node temp = Parse(list, i+1, new List<Node>(), newTop);
+                result.Add(temp);
+                return new Node(Symbol.Draw, result, new Token("null"));
             }
-            temp = Parse(list, i+1, new List<Node>(), newTop);
-            result.Add(temp);
-            result = new List<Node>{new Node(Symbol.Draw, result, new Token("null"))};
-            i = newTop;     
+            else
+            {
+                Node temp = Parse(list, i+1, new List<Node>(), newTop);
+                result.Add(temp);
+                result = new List<Node>{new Node(Symbol.Draw, result, new Token("null"))};
+                i = newTop;     
+
+            }
         }
         if(list[i].id == Symbol.Mix)
         {

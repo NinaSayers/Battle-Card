@@ -28,3 +28,18 @@
 /home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/obj/Debug/net6.0/Cards.pdb
 /home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/obj/Debug/net6.0/Cards.genruntimeconfig.cache
 /home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/obj/Debug/net6.0/ref/Cards.dll
+/home/heveryt/Proelium/Engine/Cards/bin/Debug/net6.0/Cards
+/home/heveryt/Proelium/Engine/Cards/bin/Debug/net6.0/Cards.deps.json
+/home/heveryt/Proelium/Engine/Cards/bin/Debug/net6.0/Cards.runtimeconfig.json
+/home/heveryt/Proelium/Engine/Cards/bin/Debug/net6.0/Cards.dll
+/home/heveryt/Proelium/Engine/Cards/bin/Debug/net6.0/Cards.pdb
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.csproj.AssemblyReference.cache
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.GeneratedMSBuildEditorConfig.editorconfig
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.AssemblyInfoInputs.cache
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.AssemblyInfo.cs
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.csproj.CoreCompileInputs.cache
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.dll
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/refint/Cards.dll
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.pdb
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.genruntimeconfig.cache
+/home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/ref/Cards.dll

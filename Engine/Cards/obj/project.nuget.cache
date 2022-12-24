@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8hJdf8nGwViQPuYT06RTTgbnow86hatwSFLfQGFf6zvQdNlo24nfbif8588ZyUOBIip4wmJTLwIPNWt1kxdYvA==",
+  "dgSpecHash": "tzHfxjv0scn6oy1+BMSMPF+l0BB0igFccrGkblOLuLV6luCBk08BsbXeuHcfwYkoRD+NQXfv4Z2jTfKYZjf8EA==",
   "success": true,
-  "projectFilePath": "/home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/Cards.csproj",
+  "projectFilePath": "/home/heveryt/Proelium/Engine/Cards/Cards.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

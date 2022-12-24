@@ -42,7 +42,7 @@ public class User : IStrategy
             if(i == 2)
             {
                 try{
-                var card = GetCardFromTable(state, typeof(MagicCard));
+                var card = GetCardFromTable(state, typeof(MonsterCard));
                 Move move = new Move(ActionsEnum.activateEffect, new List<Card>{card});
 
                 if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
@@ -63,7 +63,7 @@ public class User : IStrategy
             // {
             //     return new ShowTableState();
             // }
-            if(i == 4)
+            if(i == 3)
             {
                 return new Move(ActionsEnum.endPhase, new List<Card>());
             }
@@ -112,7 +112,7 @@ public class User : IStrategy
 
                             var objetive = SetObjetive(targets);
 
-                            Move move = new Move(ActionsEnum.attackCard, new List<Card>{card});
+                            Move move = new Move(ActionsEnum.attackCard, new List<Card>{card, objetive});
 
                             if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
                             return move;
@@ -136,7 +136,7 @@ public class User : IStrategy
             // {
             //     return new ShowTableState();
             // }
-            if(i == 3)
+            if(i == 2)
             {
                 return new Move(ActionsEnum.endPhase, new List<Card>());
 
@@ -184,7 +184,7 @@ public class User : IStrategy
             // {
             //     return new ShowTableState();
             // }
-            if(i == 4)
+            if(i == 3)
             {
                 return new Move(ActionsEnum.endPhase, new List<Card>());
             }
@@ -205,7 +205,7 @@ public class User : IStrategy
         foreach(var Card in targets)
         {
             Console.SetCursorPosition(65,4+i);
-            System.Console.WriteLine(i+1+" Name: "+(Card as MonsterCard)!.Name+" Life: " +(Card as MonsterCard)!.Attack +" Life: "+(Card as MonsterCard)!.Life +" Defense: "+(Card as MonsterCard)!.Defense);
+            System.Console.WriteLine(i+1+" Name: "+(Card as MonsterCard)!.Name+" Attack: " +(Card as MonsterCard)!.Attack +" Life: "+(Card as MonsterCard)!.Life +" Defense: "+(Card as MonsterCard)!.Defense);
             i++;
         }
         Console.SetCursorPosition(65,i+5);
@@ -227,9 +227,9 @@ public class User : IStrategy
         Console.SetCursorPosition(65,5);
         Console.WriteLine("2 Activate an effect");
         Console.SetCursorPosition(65,6);
-        Console.WriteLine("3 Show table state");
+        Console.WriteLine("3 End phase");
         Console.SetCursorPosition(65,7);
-        Console.WriteLine("4 End phase");
+        Console.WriteLine("4 End turn");
         Console.SetCursorPosition(65,8);
         Console.Write("> ");
         int i = int.Parse(Console.ReadLine());
@@ -241,9 +241,9 @@ public class User : IStrategy
         Console.SetCursorPosition(65,4);
         Console.WriteLine("1 Attack");
         Console.SetCursorPosition(65,5);
-        Console.WriteLine("2 Show table state");
+        Console.WriteLine("2 End phase");
         Console.SetCursorPosition(65,6);
-        Console.WriteLine("3 End phase");
+        Console.WriteLine("3 End turn");
         Console.SetCursorPosition(65,7);
         Console.Write("> ");
         int i = int.Parse(Console.ReadLine());
@@ -258,10 +258,8 @@ public class User : IStrategy
         Console.SetCursorPosition(65,5);
         Console.WriteLine("2 Activate an effect");
         Console.SetCursorPosition(65,6);
-        Console.WriteLine("3 Show table state");
+        Console.WriteLine("3 End turn");
         Console.SetCursorPosition(65,7);
-        Console.WriteLine("4 End turn");
-        Console.SetCursorPosition(65,8);
         Console.Write("> ");
         int i = int.Parse(Console.ReadLine());
         return i;
@@ -285,7 +283,7 @@ public class User : IStrategy
             if(card is MonsterCard)
             {
                 Console.SetCursorPosition(65,j+4);
-                Console.WriteLine(j+1 + " Monster : " + (card as MonsterCard)!.Name);
+                Console.WriteLine(j+1 + " Monster : " + (card as MonsterCard)!.Name+ " --> "+" Attack: " +(card as MonsterCard)!.Attack +" Life: "+(card as MonsterCard)!.Life +" Defense: "+(card as MonsterCard)!.Defense);
                 j++;
             }
             if(card is MagicCard)
@@ -325,8 +323,8 @@ public class User : IStrategy
             if(card.GetType() == type)
             {
                 Console.SetCursorPosition(65,4+j);
-                string name = (card is MonsterCard) ? (card as MonsterCard)!.Name : (card as MagicCard)!.Name;
-                Console.WriteLine(j+1 + " " + name);
+                string s = (card is MonsterCard) ? (card as MonsterCard)!.Name+ " --> "+" Attack: " +(card as MonsterCard)!.Attack +" Life: "+(card as MonsterCard)!.Life +" Defense: "+(card as MonsterCard)!.Defense : (card as MagicCard)!.Name;
+                Console.WriteLine(j+1 + " " + s);
                 j++;
             }
         }

@@ -100,7 +100,7 @@ public class GameModes
         for(int i = 0; i< 10; i++)
         {
             Console.SetCursorPosition(65,4+i);
-            Console.WriteLine("                                                   ");
+            Console.WriteLine("                                                                                                             ");
         }
     }
     public static void PrintWinner(State state,Rules rules)
@@ -112,7 +112,6 @@ public class GameModes
         if(win.Count == 1)
         {
             System.Console.WriteLine($"{win[0].Name} ha ganado!!!");
-            Thread.Sleep(5000);
         }
         else
         {
@@ -338,10 +337,11 @@ public class GameModes
     {
         if(state.Table.Decks[1].Count > 0)
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(18, 7);
-            System.Console.Write("█");
+            System.Console.Write($"{state.Table.Decks[1].Count}");
 
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.SetCursorPosition(19, 7);
             System.Console.Write("█");
 
@@ -393,10 +393,11 @@ public class GameModes
 
         if(state.Table.Decks[0].Count > 0)
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(50, 15);
-            System.Console.Write("█");
+            System.Console.Write($"{state.Table.Decks[0].Count}");
 
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.SetCursorPosition(51, 15);
             System.Console.Write("█");
 

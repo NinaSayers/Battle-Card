@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/Cards.csproj": {}
+    "/home/heveryt/Proelium/Engine/Cards/Cards.csproj": {}
   },
   "projects": {
-    "/home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/Cards.csproj": {
+    "/home/heveryt/Proelium/Engine/Cards/Cards.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/Cards.csproj",
+        "projectUniqueName": "/home/heveryt/Proelium/Engine/Cards/Cards.csproj",
         "projectName": "Cards",
-        "projectPath": "/home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/Cards.csproj",
+        "projectPath": "/home/heveryt/Proelium/Engine/Cards/Cards.csproj",
         "packagesPath": "/home/heveryt/.nuget/packages/",
-        "outputPath": "/home/heveryt/Documentos/Inventos/Proyecto Segundo Semestre/Carpeta nueva/Cards/obj/",
+        "outputPath": "/home/heveryt/Proelium/Engine/Cards/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/heveryt/.nuget/NuGet/NuGet.Config"

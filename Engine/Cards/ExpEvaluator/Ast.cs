@@ -33,6 +33,10 @@ public class Node
                 return new Assign(children[0].token.Value, (children[2].GetAST() as Expression)!, Names.SymbolNames[children[1].id]);
             }
         }
+        else if(id == Symbol.Draw)
+        {
+            return new Draw((children[0].GetAST() as Expression)!);
+        }
         else if(id == Symbol.S)
         {
             List<Statement> statements = new List<Statement>();
@@ -65,10 +69,6 @@ public class Node
         else if(id == Symbol.Mix)
         {
             return new Mix();
-        }
-        else if(id == Symbol.Draw)
-        {
-            return new Draw((children[0].GetAST() as Expression)!);
         }
 
         System.Console.WriteLine($"this node id = {id} and children count = {children.Count()}");
