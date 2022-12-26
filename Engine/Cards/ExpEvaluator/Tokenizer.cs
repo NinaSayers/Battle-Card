@@ -154,7 +154,8 @@ public class Token
         string [] tokens = new string []
         {
             "if","then","idem","plus","minus","mult","div","maior","minor","idemI","dist","minorI","maiorI","(",")"
-            ,"Player1.life","Player2.life","PlayerID","this.Attack","this.Defense","this.Life"
+            ,"Player1.life","Player2.life","PlayerID","this.Attack","this.Defense","this.Life","Monsters.Count","Deck.Count"
+            ,"Hand.Count","Cementery.Count"
             ,"creace","decreace","while","do","draw","mix",
             ",",";"
         };

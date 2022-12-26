@@ -14,11 +14,13 @@ public class MonsterCardInfo : CardInfo
     public int Health {get; set;}
     public int Attack {get; set;}
     public int Defense {get; set;}
-    public string? strEffect {get; set;}
+    public string? strEffect { get; set; }
+    public string? Description { get; set; }
 }
 
  public class SpellCardInfo : CardInfo
 {
     public string? CardName{ get; set; }
     public string? strEffect { get; set; }
+    public string? Description { get; set; }
 }

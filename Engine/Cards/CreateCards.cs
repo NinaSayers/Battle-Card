@@ -37,7 +37,7 @@ public class Creator
         System.Console.WriteLine("𝟏 Create a Spell Card");
         System.Console.WriteLine("𝟐 Create a Monster Card");
         System.Console.WriteLine("𝟑 Search Card");
-        System.Console.WriteLine("𝟒 Quit");
+        System.Console.WriteLine("𝟒 Back");
     }
 
     static void CardsMenu()
@@ -107,7 +107,7 @@ public class Creator
             int defense = int.Parse(Console.ReadLine()??"0");
 
             System.Console.WriteLine();
-            System.Console.Write("Enter the card health : ");
+            System.Console.Write("Enter the card life : ");
             int health = int.Parse(Console.ReadLine()??"0");
 
             // System.Console.WriteLine();

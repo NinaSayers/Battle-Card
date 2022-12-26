@@ -1,1 +1,1 @@
-{"CardName":"Algebra God","Health":5897,"Attack":3141,"Defense":5926,"strEffect":"draw 2; mix; if PlayerID idemI 0 then Player1.life decreace 2; if PlayerID idemI 1 then Player2.life decreace 2;"}
+{"CardName":"Algebra God","Health":5897,"Attack":3141,"Defense":5926,"strEffect":"if Deck.Count maior 2 then draw 2; if Deck.Count maior 0 then mix; if PlayerID idemI 0 then Player1.life decreace 2; if PlayerID idemI 1 then Player2.life decreace 2;"}

@@ -14,10 +14,13 @@ public class GameModes
             MixCards(Serialize.Deserial())
         }, new List<Card>(), 1);
         Rules rules = new Rules((table.Decks[0].Count, table.Decks[1].Count), 3, 5, new State());
-        Player player1 = new Player("Player1", 0, new List<IStrategy>{ new User(rules, 0)});
-        Player player2 = new Player("Player2", 1, new List<IStrategy>{new Greedy(rules, 1)});
+        Player player1 = new Player("User", 0, new List<IStrategy>{ new User(rules, 0)});
+        Player player2 = new Player("VirtualPlayer", 1, new List<IStrategy>{new Greedy(rules, 1)});
         State state = new State(1, new List<int>{1,0}, PhasesEnum.mainPhase,new List<Player>{player1, player2}, new List<List<Card>>{new List<Card>(), new List<Card>()}, new List<List<bool>>{ new List<bool>(), new List<bool>()}, table, 1, new List<float>{3, 3} );
-        Game newGame = new Game(rules, new Actions(1), state, 1);
+        Actions action = new Actions(1);
+        state = DealCards(state, action, player1.ID, player2.ID);
+
+        Game newGame = new Game(rules,action, state, 1);
 
         State temp = new State();
         foreach(State actual in newGame)
@@ -43,7 +46,10 @@ public class GameModes
         Player player1 = new Player("Player1", 0, new List<IStrategy>{ new User(rules, 0)});
         Player player2 = new Player("Player2", 1, new List<IStrategy>{new User(rules, 1)});
         State state = new State(1, new List<int>{1,0}, PhasesEnum.mainPhase,new List<Player>{player1, player2}, new List<List<Card>>{new List<Card>(), new List<Card>()}, new List<List<bool>>{ new List<bool>(), new List<bool>()}, table, 1, new List<float>{3, 3} );
-        Game newGame = new Game(rules, new Actions(1), state, 1);
+        Actions action = new Actions(1);
+        state = DealCards(state, action, player1.ID, player2.ID);
+
+        Game newGame = new Game(rules,action, state, 1);
 
         State temp = new State();
         foreach(State actual in newGame)
@@ -66,10 +72,14 @@ public class GameModes
             MixCards(Serialize.Deserial())
         }, new List<Card>(), 1);
         Rules rules = new Rules((table.Decks[0].Count, table.Decks[1].Count), 3, 5, new State());
-        Player player1 = new Player("Player1", 0, new List<IStrategy>{ new Greedy(rules, 0)});
-        Player player2 = new Player("Player2", 1, new List<IStrategy>{new Greedy(rules, 1)});
+        Player player1 = new Player("VirtualPlayer1", 0, new List<IStrategy>{ new Greedy(rules, 0)});
+        Player player2 = new Player("VirtualPlayer2", 1, new List<IStrategy>{new Greedy(rules, 1)});
         State state = new State(1, new List<int>{1,0}, PhasesEnum.mainPhase,new List<Player>{player1, player2}, new List<List<Card>>{new List<Card>(), new List<Card>()}, new List<List<bool>>{ new List<bool>(), new List<bool>()}, table, 1, new List<float>{3, 3} );
-        Game newGame = new Game(rules, new Actions(1), state, 1);
+        Actions action = new Actions(1);
+        state = DealCards(state, action, player1.ID, player2.ID);
+
+        Game newGame = new Game(rules, action, state, 1);
+        
 
         State temp = new State();
         foreach(State actual in newGame)
@@ -80,6 +90,23 @@ public class GameModes
 
         PrintWinner(temp, rules);
         
+    }
+
+    public static State DealCards(State state, Actions action, int player1, int player2)
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            if(i!=2)
+            {
+                state = action.Draw(player1, 1, state);
+                state = action.Draw(player2, 1, state);
+            }
+            else
+            {
+                state = action.Draw(player2, 1, state);
+            }
+        }
+        return state;
     }
     
     public static List<Card> MixCards(List<Card> cards)

@@ -24,6 +24,10 @@ public class Statement
             {"Player1.life", state.LifePoints[0]}
             ,{"Player2.life", state.LifePoints[1]}
             ,{"PlayerID", playerID}
+            ,{"Deck.Count", state.Table.Decks[playerID].Count}
+            ,{"Hand.Count", state.Hands.Count}
+            ,{"Monsters.Count", state.Table.MonsterCardsInvokeds[playerID].Count}
+            ,{"Cementery.Count", state.Cemetery.Count}
         };
 
         Execute();
@@ -41,6 +45,10 @@ public class Statement
             {"Player1.life", state.LifePoints[0]}
             ,{"Player2.life", state.LifePoints[1]}
             ,{"PlayerID", playerID}
+            ,{"Deck.Count", state.Table.Decks[playerID].Count}
+            ,{"Hand.Count", state.Hands.Count}
+            ,{"Monsters.Count", state.Table.MonsterCardsInvokeds[playerID].Count}
+            ,{"Cementery.Count", state.Cemetery.Count}
             ,{"this.Attack", card.Attack}
             ,{"this.Defense", card.Defense}
             ,{"this.Life", card.Life}
@@ -202,8 +210,6 @@ public class Mix : Statement
         return "Mix";
     }
 }
-
-// Define the while Statement
 
 public class While : Statement
 {

@@ -59,13 +59,13 @@ public class User : IStrategy
                     return Play(state);
                 }
             }
-            // if(i == 3)
-            // {
-            //     return new ShowTableState();
-            // }
             if(i == 3)
             {
                 return new Move(ActionsEnum.endPhase, new List<Card>());
+            }
+            if(i == 4)
+            {
+                return new Move(ActionsEnum.endTurn, new List<Card>());
             }
         }
         if(state.ActualPhase == PhasesEnum.battlePhase)
@@ -76,55 +76,55 @@ public class User : IStrategy
             if(i == 1)
             {
                 try{
-                var card = GetCardFromTable(state, typeof(MonsterCard));
-                bool directAttack = false;
+                    var card = GetCardFromTable(state, typeof(MonsterCard));
+                    bool directAttack = false;
 
-                var cards = state.Table.MonsterCardsInvokeds;
-                for(int j = 0; j < cards.Count; j++)
-                {
-                    if(j != playerID && state.Table.GetMonsterCardsInvokeds(j).Count == 0)
-                    {
-                        directAttack = true;
-                        break;
-                    }
-                }
-
-                if(directAttack)
-                {
-                    Move move = new Move(ActionsEnum.attackLifePoints, new List<Card>{card});
-
-                    if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
-                    return move;
-                    else
-                    {
-                        Print("Invalid move");
-
-                        return Play(state);
-                    }
-                }
-                else
-                {
+                    var cards = state.Table.MonsterCardsInvokeds;
                     for(int j = 0; j < cards.Count; j++)
                     {
-                        if(j != playerID)
+                        if(j != playerID && state.Table.GetMonsterCardsInvokeds(j).Count == 0)
                         {
-                            var targets = cards[j];
+                            directAttack = true;
+                            break;
+                        }
+                    }
 
-                            var objetive = SetObjetive(targets);
+                    if(directAttack)
+                    {
+                        Move move = new Move(ActionsEnum.attackLifePoints, new List<Card>{card});
 
-                            Move move = new Move(ActionsEnum.attackCard, new List<Card>{card, objetive});
+                        if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                        return move;
+                        else
+                        {
+                            Print("Invalid move");
 
-                            if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
-                            return move;
-                            else
+                            return Play(state);
+                        }
+                    }
+                    else
+                    {
+                        for(int j = 0; j < cards.Count; j++)
+                        {
+                            if(j != playerID)
                             {
-                                Print("Invalid move");
+                                var targets = cards[j];
 
-                                return Play(state);
+                                var objetive = SetObjetive(targets);
+
+                                Move move = new Move(ActionsEnum.attackCard, new List<Card>{card, objetive});
+
+                                if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                                return move;
+                                else
+                                {
+                                    Print("Invalid move");
+
+                                    return Play(state);
+                                }
                             }
                         }
                     }
-                }
                 }
                 catch
                 {
@@ -132,14 +132,14 @@ public class User : IStrategy
                 }
 
             }
-            // if(i == 2)
-            // {
-            //     return new ShowTableState();
-            // }
             if(i == 2)
             {
                 return new Move(ActionsEnum.endPhase, new List<Card>());
 
+            }
+            if(i == 3)
+            {
+                return new Move(ActionsEnum.endTurn, new List<Card>());
             }
         }
         if(state.ActualPhase == PhasesEnum.endPhase)
@@ -171,22 +171,26 @@ public class User : IStrategy
             if(i == 2)
             {
                 try{
-                    var card = GetCardFromTable(state, typeof(MagicCard));
-                    return new Move(ActionsEnum.activateEffect, new List<Card>{card});
+                var card = GetCardFromTable(state, typeof(MonsterCard));
+                Move move = new Move(ActionsEnum.activateEffect, new List<Card>{card});
 
+                if(rules.IsValidMove(move, state.ActualPhase, playerID, state))
+                return new Move(ActionsEnum.activateEffect, new List<Card>{card});
+                else
+                {
+                    Print("Invalid move");
+
+                    return Play(state);
+                }
                 }
                 catch
                 {
                     return Play(state);
                 }
             }
-            // if(i == 3)
-            // {
-            //     return new ShowTableState();
-            // }
             if(i == 3)
             {
-                return new Move(ActionsEnum.endPhase, new List<Card>());
+                return new Move(ActionsEnum.endTurn, new List<Card>());
             }
         }
         }
@@ -195,7 +199,7 @@ public class User : IStrategy
             return Play(state);
             
         }
-        return new Move(ActionsEnum.endTurn, new List<Card>());
+        return Play(state);
     }
 
     private Card SetObjetive(List<Card> targets)
@@ -265,8 +269,6 @@ public class User : IStrategy
         return i;
         
     }
-
-    
 
     private Card GetCardFromHand(State state)
     {

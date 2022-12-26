@@ -147,10 +147,9 @@ public class Parser
                     break;
                 }
             }
-            if(newTop == 0)
+            if(newTop == 0 || newTop == top)
             {
-                newTop = list.Count;
-                Node temp = Parse(list, i+1, new List<Node>(), newTop);
+                Node temp = Parse(list, i+1, new List<Node>(), top);
                 result.Add(temp);
                 return new Node(Symbol.Draw, result, new Token("null"));
             }
