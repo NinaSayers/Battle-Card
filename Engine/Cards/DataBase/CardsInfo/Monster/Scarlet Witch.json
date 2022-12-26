@@ -1,1 +1,1 @@
-{"CardName":"Scarlet Witch","Health":5000,"Attack":4000,"Defense":100,"strEffect":"if PlayerID idemI 0 then Player1.life creace 4; if PlayerID idemI 1 then Player2.life creace 4;"}
+{"CardName":"Scarlet Witch","Health":5000,"Attack":4000,"Defense":100,"strEffect":"if PlayerID idemI 0 then Player1.life creace 4; if PlayerID idemI 1 then Player2.life creace 4;","Description":"Aumenta la vida en 4 puntos."}

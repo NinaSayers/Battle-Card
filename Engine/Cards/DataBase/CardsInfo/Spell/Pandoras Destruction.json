@@ -1,1 +1,1 @@
-{"CardName":"Pandoras Destruction","strEffect":"if PlayerID idemI 0 then Player2.life decreace 1; if PlayerID idemI 1 then Player1.life decreace 1;"}
+{"CardName":"Pandoras Destruction","strEffect":"if PlayerID idemI 0 then Player2.life decreace 1; if PlayerID idemI 1 then Player1.life decreace 1;","Description":"Disminuye la vida del adversario en un punto."}

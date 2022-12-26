@@ -51,11 +51,11 @@ public class Serialize
 
     private static MonsterCard CreateMonsterCard(MonsterCardInfo card)
     {
-        return new MonsterCard(card.CardName, card.Health, card.Attack, card.Defense, card.strEffect);
+        return new MonsterCard(card.CardName, card.Health, card.Attack, card.Defense, card.strEffect, card.Description);
     }
 
     private static MagicCard CreateMagicCard(SpellCardInfo card)
     {
-        return new MagicCard(card.CardName, card.strEffect);
+        return new MagicCard(card.CardName, card.strEffect, card.Description);
     }
 }

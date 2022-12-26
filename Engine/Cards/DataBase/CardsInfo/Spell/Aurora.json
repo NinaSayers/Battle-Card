@@ -1,0 +1,1 @@
+{"CardName":"Aurora","strEffect":"if PlayerID idemI 0 then Player1.life creace Monsters.Count; if PlayerID idemI 1 then Player2.life creace Monsters.Count;","Description":"Aumenta la vida en la cantidad de monstruos aliados en el campo."}

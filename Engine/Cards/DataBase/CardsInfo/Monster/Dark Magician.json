@@ -1,1 +1,1 @@
-{"CardName":"Dark Magician","Health":2300,"Attack":2500,"Defense":2100,"strEffect":"if PlayerID idemI 0 then Player1.life creace 1; if PlayerID idemI 1 then Player2.life creace 1;"}
+{"CardName":"Dark Magician","Health":2300,"Attack":2500,"Defense":2100,"strEffect":"if PlayerID idemI 0 then Player1.life creace 1; if PlayerID idemI 1 then Player2.life creace 1;","Description":"Aumenta la vida en un punto."}

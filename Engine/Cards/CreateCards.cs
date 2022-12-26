@@ -83,7 +83,8 @@ public class Creator
             var card = new SpellCardInfo
             {
                 CardName = cardName,
-                strEffect = effect
+                strEffect = effect,
+                Description = description
             };
 
             string filename = $"./DataBase/CardsInfo/Spell/{cardName}.json";
@@ -110,9 +111,9 @@ public class Creator
             System.Console.Write("Enter the card life : ");
             int health = int.Parse(Console.ReadLine()??"0");
 
-            // System.Console.WriteLine();
-            // System.Console.Write("Enter the card description : ");
-            // string? description = Console.ReadLine();
+            System.Console.WriteLine();
+            System.Console.Write("Enter the card description : ");
+            string? description = Console.ReadLine();
             
             Effect:
             System.Console.WriteLine();
@@ -134,7 +135,9 @@ public class Creator
                 Attack = attack,
                 Defense = defense,
                 Health = health,
-                strEffect = effect
+                strEffect = effect,
+                Description = description
+                
             };
 
             string filename = $"./DataBase/CardsInfo/Monster/{cardName}.json";

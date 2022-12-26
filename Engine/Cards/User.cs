@@ -277,6 +277,7 @@ public class User : IStrategy
         Console.SetCursorPosition(65,4);
         Console.WriteLine("Choose a card from your hand");
         Console.SetCursorPosition(65,5);
+        int k = 0;
         int j = 0;
         var hand = state.GetHand(playerID);
         GameModes.Clear();
@@ -284,18 +285,30 @@ public class User : IStrategy
         {
             if(card is MonsterCard)
             {
-                Console.SetCursorPosition(65,j+4);
+                Console.SetCursorPosition(65,k+4);
                 Console.WriteLine(j+1 + " Monster : " + (card as MonsterCard)!.Name+ " --> "+" Attack: " +(card as MonsterCard)!.Attack +" Life: "+(card as MonsterCard)!.Life +" Defense: "+(card as MonsterCard)!.Defense);
+                Console.SetCursorPosition(65,k+5);
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write("Effect : ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine((card as MonsterCard)!.Description);
+                k+=3;
                 j++;
             }
             if(card is MagicCard)
             {
-                Console.SetCursorPosition(65,4+j);
+                Console.SetCursorPosition(65,4+k);
                 Console.WriteLine(j+1 + " Magic : " + (card as MagicCard)!.Name);
+                Console.SetCursorPosition(65,k+5);
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write("Effect : ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine((card as MagicCard)!.Description);
                 j++;
+                k+=3;
             }
         }
-        Console.SetCursorPosition(65,j +5);
+        Console.SetCursorPosition(65,k +5);
         Console.Write("> ");
         int i = int.Parse(Console.ReadLine());
         return hand[i-1];
@@ -309,6 +322,7 @@ public class User : IStrategy
         Console.WriteLine("Choose a card from your Table");
         Console.SetCursorPosition(65,5);
         int j = 0;
+        int k = 0;
         List<Card> cards = new List<Card>();
         if(type.Name == "MonsterCard")
         {
@@ -324,13 +338,19 @@ public class User : IStrategy
         {
             if(card.GetType() == type)
             {
-                Console.SetCursorPosition(65,4+j);
+                Console.SetCursorPosition(65,4+k);
                 string s = (card is MonsterCard) ? (card as MonsterCard)!.Name+ " --> "+" Attack: " +(card as MonsterCard)!.Attack +" Life: "+(card as MonsterCard)!.Life +" Defense: "+(card as MonsterCard)!.Defense : (card as MagicCard)!.Name;
                 Console.WriteLine(j+1 + " " + s);
+                Console.SetCursorPosition(65,k+5);
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write("Effect : ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine((card as MonsterCard)!.Description);
+                k+=3;
                 j++;
             }
         }
-        Console.SetCursorPosition(65,j+5);
+        Console.SetCursorPosition(65,k+5);
         Console.Write("> ");
         int i = int.Parse(Console.ReadLine());
         return cards[i-1];

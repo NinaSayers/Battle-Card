@@ -822,16 +822,18 @@ namespace ProeliumEngine
         private float defense; //número para la estadística del cálculo de daño (programar a parte para la futura creación de un monstruo random)
         private int gameID = 1;//Type
         private Statement Effect;
+        public string Description {get; private set;}
 
         //private T cardState; //normal, borracho, lento, óptimo, moral... por efecto de alguna carta de hechizo (programar a parte para la futura creación de un monstruo random)
 
-        public MonsterCard(string name, float life, float attack, float defense, string strEffect)
+        public MonsterCard(string name, float life, float attack, float defense, string strEffect, string description)
         {
             this.name = name;
             this.life = life;
             this.attack = attack;
             this.defense = defense;
             this.Effect = Parser.Construct(strEffect);
+            this.Description = description;
         }
         public string Name { get { return this.name; } }
         // public CardState CardState { get { return this.cardState; } }
@@ -870,10 +872,12 @@ namespace ProeliumEngine
     {
         public string Name { get; private set; }
         private Statement Effect;
-        public MagicCard(string Name, string strEffect)
+        public string Description { get; private set; }
+        public MagicCard(string Name, string strEffect, string description)
         {
             this.Name = Name;
             this.Effect = Parser.Construct(strEffect);
+            this.Description = description;
         }
         public override State EffectExecute(State state, int playerID)
         {
