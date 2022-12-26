@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "/home/heveryt/.nuget/packages/": {}
+    "C:\\Users\\Massy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/heveryt/Proelium/Engine/Cards/Cards.csproj",
+      "projectUniqueName": "E:\\Universidad\\Programacion\\1ero\\2do semestre\\.PROYECTOS\\.Proelium\\1raPrueba del juego\\Proelium\\Proelium\\Engine\\Cards\\Cards.csproj",
       "projectName": "Cards",
-      "projectPath": "/home/heveryt/Proelium/Engine/Cards/Cards.csproj",
-      "packagesPath": "/home/heveryt/.nuget/packages/",
-      "outputPath": "/home/heveryt/Proelium/Engine/Cards/obj/",
+      "projectPath": "E:\\Universidad\\Programacion\\1ero\\2do semestre\\.PROYECTOS\\.Proelium\\1raPrueba del juego\\Proelium\\Proelium\\Engine\\Cards\\Cards.csproj",
+      "packagesPath": "C:\\Users\\Massy\\.nuget\\packages\\",
+      "outputPath": "E:\\Universidad\\Programacion\\1ero\\2do semestre\\.PROYECTOS\\.Proelium\\1raPrueba del juego\\Proelium\\Proelium\\Engine\\Cards\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/heveryt/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Massy\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -49,7 +49,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -58,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.202/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

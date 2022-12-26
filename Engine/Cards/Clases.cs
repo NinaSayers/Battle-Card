@@ -10,153 +10,155 @@ namespace ProeliumEngine
     #region Game 
     //****AQUí VAN LAS POSIBLES ACCIONES A REALIZAR EN EL JUEGO (modifican el estado)
     using ProeliumEngine;
-public class Game : IEnumerable<State> //Falta terminar automáticamente la MainPhase cuando ya no queden cartas por invocar*****
-{
-    private Rules rules;
-    private State state;
-    private Actions actions;
-    int gameID;
-    private List<PhasesEnum> phases = new List<PhasesEnum> { PhasesEnum.drawPhase, PhasesEnum.mainPhase, PhasesEnum.battlePhase, PhasesEnum.endPhase };
-    public Game(Rules rules, Actions actions, State state, int gameID)
+    public class Game : IEnumerable<State> //Falta terminar automáticamente la MainPhase cuando ya no queden cartas por invocar*****
     {
-        this.rules = rules;
-        this.state = state;
-        this.actions = actions;
-        this.gameID = gameID;
-    }
-
-    public IEnumerable<State> Game_()
-    {
-        bool end = false;
-        bool endPhase = false;
-        bool endTurn = false;
-        bool[] maskAttack;
-        while (!this.rules.IsEndGame(this.state))
+        private Rules rules;
+        private State state;
+        private Actions actions;
+        int gameID;
+        private List<PhasesEnum> phases = new List<PhasesEnum> { PhasesEnum.drawPhase, PhasesEnum.mainPhase, PhasesEnum.battlePhase, PhasesEnum.endPhase };
+        public Game(Rules rules, Actions actions, State state, int gameID)
         {
-            foreach (Player player in this.state.Players)
+            this.rules = rules;
+            this.state = state;
+            this.actions = actions;
+            this.gameID = gameID;
+        }
+
+        public IEnumerable<State> Game_()
+        {
+            bool end = false;
+            bool endPhase = false;
+            bool endTurn = false;
+            bool[] maskAttack;
+            while (!this.rules.IsEndGame(this.state))
             {
-                endTurn = false;
-                state.ResetYaAtacó(gameID, player.ID);
-                maskAttack = new bool[this.state.Table.GetMonsterCardsInvokeds(player.ID).Count];
-
-                foreach (PhasesEnum phase in this.phases)
+                foreach (Player player in this.state.Players)
                 {
-                    endPhase = false;
-                    if (this.rules.IsEndGame(this.state)) { end = true; break; }
-                    if (phase == PhasesEnum.drawPhase)
-                    {
-                        this.state.SetActualPhase(this.gameID, phase);
-                        yield return this.state;
-                        this.actions.Draw(player.ID, this.gameID, state);
-                        yield return this.state;
-                        continue;
-                    }
-                    while (!endPhase && !endTurn)
-                    {
-                        this.state.SetActualPhase(this.gameID, phase);
-                        yield return this.state;
+                    endTurn = false;
+                    state.ResetYaAtacó(gameID, player.ID);
+                    maskAttack = new bool[this.state.Table.GetMonsterCardsInvokeds(player.ID).Count];
 
-                        Move jugada = player.Jugada(state);
-                        if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; continue; }
-                        if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; continue; }
-                        if (this.rules.IsValidMove(jugada, phase, player.ID, this.state))
+                    foreach (PhasesEnum phase in this.phases)
+                    {
+                        endPhase = false;
+                        if (this.rules.IsEndGame(this.state)) { end = true; break; }
+                        if (phase == PhasesEnum.drawPhase)
                         {
-                            if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; }
-                            if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; }
-                            else
+                            this.state.SetActualPhase(this.gameID, phase);
+                            yield return this.state;
+                            this.actions.Draw(player.ID, this.gameID, state);
+                            yield return this.state;
+                            continue;
+                        }
+                        while (!endPhase && !endTurn)
+                        {
+                            this.state.SetActualPhase(this.gameID, phase);
+                            yield return this.state;
+
+                            Move jugada = player.Jugada(state);
+                            if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; continue; }
+                            if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; continue; }
+                            if (this.rules.IsValidMove(jugada, phase, player.ID, this.state))
                             {
-                                if (jugada.Action == ActionsEnum.attackCard || jugada.Action == ActionsEnum.attackLifePoints)
+                                if (jugada.Action == ActionsEnum.endPhase) { endPhase = true; }
+                                if (jugada.Action == ActionsEnum.endTurn) { endTurn = true; }
+                                else
                                 {
-                                    if (IsFullCardAttack(maskAttack)) { endPhase = true; continue; }
-
-                                }
-                                if (jugada.Action == ActionsEnum.invoke)
-                                {
-
-                                    if (jugada.CardsInTheAction[0].GetType() == typeof(MagicCard))
+                                    if (jugada.Action == ActionsEnum.attackCard || jugada.Action == ActionsEnum.attackLifePoints)
                                     {
-                                        if (this.state.Table.GetMagicCardsInvokeds(player.ID).Count == this.state.Table.MaximumCardsInvokeds) { endPhase = true; continue; }
-                                        else
+                                        if (IsFullCardAttack(maskAttack)) { endPhase = true; continue; }
+
+                                    }
+                                    if (jugada.Action == ActionsEnum.invoke)
+                                    {
+
+                                        if (jugada.CardsInTheAction[0].GetType() == typeof(MagicCard))
                                         {
-                                            ActionToDo(player, jugada, this.state);
-                                            yield return this.state;
-                                            yield return this.actions.ActivateEffect(jugada.CardsInTheAction[0], player.ID, this.gameID, state);
-                                            this.state.Table.AddCardToCemetery(this.gameID, jugada.CardsInTheAction[0]);
-                                            this.state.Table.RemoveMagicCard(player.ID, this.gameID, (jugada.CardsInTheAction[0] as MagicCard)!);
-                                            yield return this.state;
-                                            continue;
+                                            if (this.state.Table.GetMagicCardsInvokeds(player.ID).Count == this.state.Table.MaximumCardsInvokeds) { endPhase = true; continue; }
+                                            else
+                                            {
+                                                ActionToDo(player, jugada, this.state);
+                                                yield return this.state;
+                                                yield return this.actions.ActivateEffect(jugada.CardsInTheAction[0], player.ID, this.gameID, state);
+                                                this.state.Table.AddCardToCemetery(this.gameID, jugada.CardsInTheAction[0]);
+                                                this.state.Table.RemoveMagicCard(player.ID, this.gameID, (jugada.CardsInTheAction[0] as MagicCard)!);
+                                                yield return this.state;
+                                                if (this.rules.IsEndGame(this.state)) { end = true; endPhase = true; break; }
+                                                continue;
+                                            }
+                                        }
+
+                                        if (jugada.CardsInTheAction[0].GetType() == typeof(MonsterCard))
+                                        {
+                                            if (this.state.Table.GetMonsterCardsInvokeds(player.ID).Count == this.state.Table.MaximumCardsInvokeds) { endPhase = true; continue; }
                                         }
                                     }
-
-                                    if (jugada.CardsInTheAction[0].GetType() == typeof(MonsterCard))
-                                    {
-                                        if (this.state.Table.GetMonsterCardsInvokeds(player.ID).Count == this.state.Table.MaximumCardsInvokeds) { endPhase = true; continue; }
-                                    }
+                                    ActionToDo(player, jugada, this.state);
+                                    if (this.rules.IsEndGame(this.state)) { end = true; endPhase = true; break; }
                                 }
-                                ActionToDo(player, jugada, this.state);
+                                yield return this.state;
+                                if (this.rules.IsEndGame(this.state)) { end = true; endPhase = true; break; }
                             }
-                            yield return this.state;
-                            if (this.rules.IsEndGame(this.state)) { end = true; break; }
+                            else throw new Exception("Jugada no válida.");
                         }
-                        else throw new Exception("Jugada no válida.");
+                        if (endTurn) break;
                     }
-                    if (endTurn) break;
+                    endTurn = true;
+
+                    if (end) break;
+                    this.state.SetTurnsByPlayer(this.gameID, player.ID, this.state.TurnsByPlayer[player.ID] + 1);
+                    yield return this.state;
+                    if (this.rules.IsEndGame(this.state)) { end = true; break; }
                 }
-                endTurn = true;
-
                 if (end) break;
-                this.state.SetTurnsByPlayer(this.gameID, player.ID, this.state.TurnsByPlayer[player.ID] + 1);
+                this.state.SetGameTurns(this.gameID, this.state.GameTurns + 1);
                 yield return this.state;
-                if (this.rules.IsEndGame(this.state)) { end = true; break; }
+                if (this.rules.IsEndGame(this.state)) break;
             }
-            if (end) break;
-            this.state.SetGameTurns(this.gameID, this.state.GameTurns + 1);
-            yield return this.state;
-            if (this.rules.IsEndGame(this.state)) break;
         }
-    }
-    public IEnumerator<State> GetEnumerator()
-    {
-        return Game_().GetEnumerator();
-    }
+        public IEnumerator<State> GetEnumerator()
+        {
+            return Game_().GetEnumerator();
+        }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-    private void ActionToDo(Player player, Move jugada, State state) //Realiza la acción en el juego de acuerdo a la entrada del jugador
-    {
-        switch (jugada.Action)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            case ActionsEnum.mix:
-                this.state = this.actions.Mix(player.ID, this.gameID, state);
-                return;
-            case ActionsEnum.invoke:
-                this.state = this.actions.Invoke(jugada.CardsInTheAction[0], player.ID, this.gameID, state);
-                return;
-            case ActionsEnum.attackCard:
-                this.state = this.actions.AttackCard(this.gameID, player.ID, jugada.CardsInTheAction[0] as MonsterCard, jugada.CardsInTheAction[1] as MonsterCard, state);
-                return;
-            case ActionsEnum.attackLifePoints:
-                this.state = this.actions.AttackLifePoints(this.gameID, player.ID, jugada.CardsInTheAction[0] as MonsterCard, state);
-                return;
-            case ActionsEnum.discard:
-                this.state = this.actions.Discard(this.gameID, player.ID, jugada.CardsInTheAction[0], state);
-                return;
-            case ActionsEnum.activateEffect:
-                this.state = this.actions.ActivateEffect(jugada.CardsInTheAction[0], player.ID, this.gameID, state);
-                return;
+            return GetEnumerator();
+        }
+        private void ActionToDo(Player player, Move jugada, State state) //Realiza la acción en el juego de acuerdo a la entrada del jugador
+        {
+            switch (jugada.Action)
+            {
+                case ActionsEnum.mix:
+                    this.state = this.actions.Mix(player.ID, this.gameID, state);
+                    return;
+                case ActionsEnum.invoke:
+                    this.state = this.actions.Invoke(jugada.CardsInTheAction[0], player.ID, this.gameID, state);
+                    return;
+                case ActionsEnum.attackCard:
+                    this.state = this.actions.AttackCard(this.gameID, player.ID, jugada.CardsInTheAction[0] as MonsterCard, jugada.CardsInTheAction[1] as MonsterCard, state);
+                    return;
+                case ActionsEnum.attackLifePoints:
+                    this.state = this.actions.AttackLifePoints(this.gameID, player.ID, jugada.CardsInTheAction[0] as MonsterCard, state);
+                    return;
+                case ActionsEnum.discard:
+                    this.state = this.actions.Discard(this.gameID, player.ID, jugada.CardsInTheAction[0], state);
+                    return;
+                case ActionsEnum.activateEffect:
+                    this.state = this.actions.ActivateEffect(jugada.CardsInTheAction[0], player.ID, this.gameID, state);
+                    return;
+            }
+        }
+        private bool IsFullCardAttack(bool[] cardsQueAtacaron)
+        {
+            foreach (bool card in cardsQueAtacaron)
+            {
+                if (card) return true;
+            }
+            return false;
         }
     }
-    private bool IsFullCardAttack(bool[] cardsQueAtacaron)
-    {
-        foreach (bool card in cardsQueAtacaron)
-        {
-            if (card) return true;
-        }
-        return false;
-    }
-}
     public class Actions
     {
         private int gameID;
@@ -249,7 +251,7 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
             }
             if (card is FieldCard)//Considerar quién invocó la carta para saber quién puede activar el efecto durante el juego
             {
-                MyExceptions.NoFoundedCardException(new List<Card>{state.Table.FieldCard}, card, "No se puede activar el efecto de cartas que no han sido invocadas.");
+                MyExceptions.NoFoundedCardException(new List<Card> { state.Table.FieldCard }, card, "No se puede activar el efecto de cartas que no han sido invocadas.");
                 newState.Table.SetFieldCard(this.gameID, (card as FieldCard)!);
             }
             return newState;
@@ -780,7 +782,7 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
                     // result.Add(state.Players[0]);
                     result.Add(state.Players[1]);
                 }
-                else if (lifesPlayer_2 < lifesPlayer_1 || countDeckPlayer_2 == 0 &&  countDeckPlayer_1 != 0 && lifesPlayer_1 > 0)
+                else if (lifesPlayer_2 < lifesPlayer_1 || countDeckPlayer_2 == 0 && countDeckPlayer_1 != 0 && lifesPlayer_1 > 0)
                 {
                     // result = new List<Player>();
                     // result.Add(state.Players[1]);
@@ -829,7 +831,7 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
             this.defense = defense;
             this.strEffect = strEffect;
         }
-        Statement Effect { get {return Parser.Construct(strEffect);} set{} }
+        Statement Effect { get { return Parser.Construct(strEffect); } set { } }
         public string Name { get { return this.name; } }
         // public CardState CardState { get { return this.cardState; } }
         public float Life { get { return this.life; } }
@@ -838,7 +840,7 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
 
         public override State EffectExecute(State state, int playerID)
         {
-            return Effect.Execute(state, playerID,this);
+            return Effect.Execute(state, playerID, this);
         }
 
         public void SetLife(int gameID, float modifiedLife)
@@ -866,7 +868,7 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
     public class MagicCard : Card
     {
         public string Name { get; private set; }
-        public string strEffect {get; private set;}
+        public string strEffect { get; private set; }
         Statement Effect { get { return Parser.Construct(strEffect); } set { } }
         public MagicCard(string Name, string strEffect)
         {
@@ -942,9 +944,9 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
             return this.strategies[0].Play(state);
         }
     }
-        //private State state;
+    //private State state;
     public class Greedy : IStrategy
-{
+    {
         private Rules rules;
         private int playerID;
         public Greedy(Rules rules, int playerID)
@@ -952,79 +954,79 @@ public class Game : IEnumerable<State> //Falta terminar automáticamente la Main
             this.rules = rules;
             this.playerID = playerID;
         }
-    public Move Play(State state)
-    {
-        bool yaInvocó = false;
-        if (state.ActualPhase == PhasesEnum.mainPhase)
+        public Move Play(State state)
         {
-            if (state.GetHand(playerID).Count! > 0)
+            bool yaInvocó = false;
+            if (state.ActualPhase == PhasesEnum.mainPhase)
             {
-                foreach (Card card in state.GetHand(playerID))
+                if (state.GetHand(playerID).Count! > 0)
                 {
-                    List<Card> invokedCard = new List<Card> { card };
-                    if (rules.IsValidInvoke(playerID, state, new Move(ActionsEnum.invoke, invokedCard)))
+                    foreach (Card card in state.GetHand(playerID))
                     {
-                        yaInvocó = true;
-                        return new Move(ActionsEnum.invoke, invokedCard);
-                    }
-                }
-                if (!yaInvocó) return new Move(ActionsEnum.endPhase);
-            }
-        }
-        if (state.ActualPhase == PhasesEnum.battlePhase)
-        {
-            if (state.Table.GetMonsterCardsInvokeds(playerID).Count == 0) return new Move(ActionsEnum.endPhase);
-            foreach (List<Card> cards in state.Table.MonsterCardsInvokeds)
-            {
-                if (state.Table.MonsterCardsInvokeds.IndexOf(cards) != playerID)
-                {
-                    if (cards.Count == 0)
-                    {
-                        for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(playerID).Count; i++)
-                        {
-                            if (!state.GetYaAtacó(playerID)[i])
-                            {
-                                List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(playerID)[i] };
-                                if (rules.IsValidAttackPointsLife(state, playerID, new Move(ActionsEnum.attackLifePoints, actionCards))) return new Move(ActionsEnum.attackLifePoints, actionCards);
-                                else continue;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(playerID).Count; i++)
-                        {
-                            if (!state.GetYaAtacó(playerID)[i])
-                            {
-                                List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(playerID)[i], cards[cards.Count - 1] };
-                                if (rules.IsValidAttack(state, playerID, new Move(ActionsEnum.attackCard, actionCards))) return new Move(ActionsEnum.attackCard, actionCards);
-                            }
-                        }
-                    }
-                    if (rules.IsValidMove(new Move(ActionsEnum.endPhase), state.ActualPhase, playerID, state)) return new Move(ActionsEnum.endPhase);
-                }
-            }
-        }
-        if (state.ActualPhase == PhasesEnum.endPhase)
-        {
-            if (state.GetHand(playerID).Count! > 0)
-            {
-                foreach (Card card in state.GetHand(playerID))
-                {
-                    List<Card> actionCard = new List<Card> { card };
-                    if (rules.IsValidInvoke(playerID, state, new Move(ActionsEnum.invoke, actionCard)))
-                    {
-                        yaInvocó = true;
                         List<Card> invokedCard = new List<Card> { card };
-                        return new Move(ActionsEnum.invoke, invokedCard);
+                        if (rules.IsValidInvoke(playerID, state, new Move(ActionsEnum.invoke, invokedCard)))
+                        {
+                            yaInvocó = true;
+                            return new Move(ActionsEnum.invoke, invokedCard);
+                        }
+                    }
+                    if (!yaInvocó) return new Move(ActionsEnum.endPhase);
+                }
+            }
+            if (state.ActualPhase == PhasesEnum.battlePhase)
+            {
+                if (state.Table.GetMonsterCardsInvokeds(playerID).Count == 0) return new Move(ActionsEnum.endPhase);
+                foreach (List<Card> cards in state.Table.MonsterCardsInvokeds)
+                {
+                    if (state.Table.MonsterCardsInvokeds.IndexOf(cards) != playerID)
+                    {
+                        if (cards.Count == 0)
+                        {
+                            for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(playerID).Count; i++)
+                            {
+                                if (!state.GetYaAtacó(playerID)[i])
+                                {
+                                    List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(playerID)[i] };
+                                    if (rules.IsValidAttackPointsLife(state, playerID, new Move(ActionsEnum.attackLifePoints, actionCards))) return new Move(ActionsEnum.attackLifePoints, actionCards);
+                                    else continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < state.Table.GetMonsterCardsInvokeds(playerID).Count; i++)
+                            {
+                                if (!state.GetYaAtacó(playerID)[i])
+                                {
+                                    List<Card> actionCards = new List<Card> { state.Table.GetMonsterCardsInvokeds(playerID)[i], cards[cards.Count - 1] };
+                                    if (rules.IsValidAttack(state, playerID, new Move(ActionsEnum.attackCard, actionCards))) return new Move(ActionsEnum.attackCard, actionCards);
+                                }
+                            }
+                        }
+                        if (rules.IsValidMove(new Move(ActionsEnum.endPhase), state.ActualPhase, playerID, state)) return new Move(ActionsEnum.endPhase);
                     }
                 }
-                if (!yaInvocó) return new Move(ActionsEnum.endPhase);
             }
+            if (state.ActualPhase == PhasesEnum.endPhase)
+            {
+                if (state.GetHand(playerID).Count! > 0)
+                {
+                    foreach (Card card in state.GetHand(playerID))
+                    {
+                        List<Card> actionCard = new List<Card> { card };
+                        if (rules.IsValidInvoke(playerID, state, new Move(ActionsEnum.invoke, actionCard)))
+                        {
+                            yaInvocó = true;
+                            List<Card> invokedCard = new List<Card> { card };
+                            return new Move(ActionsEnum.invoke, invokedCard);
+                        }
+                    }
+                    if (!yaInvocó) return new Move(ActionsEnum.endPhase);
+                }
+            }
+            return new Move(ActionsEnum.endPhase);
         }
-        return new Move(ActionsEnum.endPhase);
     }
-}
 
 
     #endregion Players
