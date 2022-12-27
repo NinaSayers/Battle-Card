@@ -8,7 +8,7 @@
 
 Proelium, cuya traducción al español es “batalla”, es un juego basado en el famoso Yu-hi-oh!
 
-Se trata de un enfrentamiento entre dos jugadores y cuyo objetivo llevar a 0 los puntos de vida del adversario, o dejar a este sin cartas que robar en su mazo personal.
+Se trata de un enfrentamiento entre dos jugadores y cuyo objetivo es llevar a 0 los puntos de vida del adversario, o dejar a este sin cartas que robar en su mazo personal.
 Para ello utilizarán durante los enfrentamientos cartas de tipo monstruo y mágicas.
 
 Cada turno está compuesto por una serie de fases dispuestas en este mismo orden:
@@ -16,7 +16,7 @@ Cada turno está compuesto por una serie de fases dispuestas en este mismo orden
 - `Robo` tiene lugar, de forma automática, el robo de una carta del mazo individual.
 - `Fase principal`  el jugador puede elegir invocar cartas que tenga en su mano y/o activar los efectos de las cartas que estén en el campo.
 (Téngase en cuenta que existe un límite de cartas a invocar en el campo, y que las cartas mágicas tienen una duración efímera en el tablero, es decir, una vez invocadas se activa automáticamente su efecto y acto seguido es enviada al cementerio.)
-- `Fase de batalla` se realizan los ataques a través de las cartas de monstruo. El jugador activo puede elegir si realiza o no un ataque a una carta de monstruo. En caso de que el oponente no tenga invocadas cartas de tipo monstruo, el jugador activo podrá realizar ataques directos y así restar puntos de vida del adversario. 
+- `Fase de batalla` se realizan los ataques a través de las cartas de monstruo. El jugador activo puede elegir si realiza o no un ataque a una carta de monstruo. En caso de que el oponente no tenga invocadas cartas de tipo monstruo, el jugador activo podrá realizar ataques directos y así restarle puntos de vida al adversario. 
 - `Fase final` se puede invocar cartas y/o activar el efecto de algunas de las barajas que estén invocadas y cuyo efecto no haya sido activado previamente en el turno.
 
 En cualquier fase el jugador activo puede decidir finalizar la fase actual o su turno.
