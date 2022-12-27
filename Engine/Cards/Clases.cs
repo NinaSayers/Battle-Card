@@ -3,14 +3,9 @@ using ExpEvaluator;
 
 namespace ProeliumEngine
 {
-    //PLANIFICACION***!!!!!! (esto es para el análisis de cómo pensar la "organización" de las funcionalidades del programa) ESTADO
-    //MAQUINA DE ESTADO FINITA***!!!! (esto es para la secuencia de los turnos) JUEGO
-    //IMPLEMENTAR iSTRATEGY (son las estrategias de juego que pueden implementar los jugadores/ son las que intervienen directamente con las decisioness a tomar respecto a las jugadas)
-    //ACCEDER A LA INFO DEL ESTADO MEDIANTE METODOS que este tendrá y que, dadas infos específicas (identificadores en caso de acceder a las manos de los jugadores, por ej), dé la info qeu se le pida
     #region Game 
-    //****AQUí VAN LAS POSIBLES ACCIONES A REALIZAR EN EL JUEGO (modifican el estado)
-    using ProeliumEngine;
-    public class Game : IEnumerable<State> //Falta terminar automáticamente la MainPhase cuando ya no queden cartas por invocar*****
+    //POSIBLES ACCIONES A REALIZAR EN EL JUEGO (modifican el estado)
+    public class Game : IEnumerable<State>
     {
         private Rules rules;
         private State state;
@@ -24,7 +19,6 @@ namespace ProeliumEngine
             this.actions = actions;
             this.gameID = gameID;
         }
-
         public IEnumerable<State> Game_()
         {
             bool end = false;
@@ -47,14 +41,14 @@ namespace ProeliumEngine
                         {
                             this.state.SetActualPhase(this.gameID, phase);
                             yield return this.state;
-                            
-                            if(state.Table.Decks[player.ID].Count <= 0) { end = true; break; }
+
+                            if (this.rules.IsEndGame(this.state)) { end = true; break; }
                             else
-                            this.actions.Draw(player.ID, this.gameID, state);
+                                this.actions.Draw(player.ID, this.gameID, state);
                             yield return this.state;
                             continue;
                         }
-                        if(state.TurnsByPlayer[0] == 1 && phase == PhasesEnum.battlePhase)
+                        if (state.TurnsByPlayer[0] == 1 && phase == PhasesEnum.battlePhase)
                         {
                             continue;
                         }
@@ -128,7 +122,6 @@ namespace ProeliumEngine
         {
             return Game_().GetEnumerator();
         }
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -166,7 +159,7 @@ namespace ProeliumEngine
             return false;
         }
     }
-    public class Actions
+    public class Actions : IAction
     {
         private int gameID;
         public Actions(int gameID)
@@ -185,14 +178,12 @@ namespace ProeliumEngine
             newState.Table.RemoveCardToDeck(playerID, gameID, newcard);
             return newState;
         }
-
         public State Mix(int playerID, int gameID, State state)
         {
             MyExceptions.InvalidGameIDException(gameID, this.gameID, "ID incorrecto. No puede barajar el Deck.");
             MyExceptions.InvalidPlayerIDException(playerID, state.Table.Decks.Count - 1);
             MyExceptions.EmptyCollectionCardsException(state.Table.GetDeck(playerID), "No hay cartas en el mazo.");
 
-            // List<Card> oldDeck = new List<Card>(state.Table.GetDeck(playerID).Count);
             List<Card> oldDeck = state.Table.GetDeck(playerID);
             List<Card> newDeck = new List<Card>(oldDeck.Count);
             Random random = new Random();
@@ -206,7 +197,6 @@ namespace ProeliumEngine
             newState.Table.SetDeck(playerID, gameID, newDeck);
             return newState;
         }
-
         public State Invoke(Card card, int playerID, int gameID, State state) //Activar efecto en caso de ser carta mágica**** OJO, BARRANCO, PELIGRO
         {
             MyExceptions.InvalidGameIDException(gameID, this.gameID, "ID inconrrecto. No puede invocar cartas.");
@@ -238,7 +228,6 @@ namespace ProeliumEngine
             }
             return newState;
         }
-
         public State ActivateEffect(Card card, int playerID, int gameID, State state)
         {
             MyExceptions.InvalidGameIDException(gameID, this.gameID, "ID inconrrecto. No puede activar el efecto de ninguna carta.");
@@ -256,7 +245,7 @@ namespace ProeliumEngine
                 int index = state.Table.GetMagicCardsInvokeds(playerID).IndexOf(card);
                 newState.Table.MagicCardsInvokeds[playerID][index].EffectExecute(newState, playerID);
             }
-            if (card is FieldCard)//Considerar quién invocó la carta para saber quién puede activar el efecto durante el juego
+            if (card is FieldCard)
             {
                 MyExceptions.NoFoundedCardException(new List<Card> { state.Table.FieldCard }, card, "No se puede activar el efecto de cartas que no han sido invocadas.");
                 newState.Table.SetFieldCard(this.gameID, (card as FieldCard)!);
@@ -320,7 +309,6 @@ namespace ProeliumEngine
             if (playerID == 0)
             {
                 newState.SetLifePoints(gameID, 1, state.GetLifePoints(1) - 1);
-
             }
             else
             {
@@ -348,7 +336,6 @@ namespace ProeliumEngine
             MyExceptions.InvalidGameIDException(gameID, this.gameID, "ID incorrecto. No puede finalizar el turno.");
             return true;
         }
-
     }
     public struct State
     {
@@ -361,7 +348,6 @@ namespace ProeliumEngine
         private List<float> lifePoints; //vidas de los jugadores 
         private Table table;
         private int gameID;
-
         public State(int gameTurns, List<int> turnsByPlayer, PhasesEnum actualPhase, List<Player> players, List<List<Card>> hands, List<List<bool>> yaAtacó, Table table, int gameID, List<float> lifePoints)
         {
             this.gameTurns = gameTurns;
@@ -452,7 +438,6 @@ namespace ProeliumEngine
             this.yaAtacó.RemoveAt(this.yaAtacó.Count - 1);
             return;
         }
-
         public void MarkYaAtacó(int gameID, int playerID, Card attackantCard)
         {
             MyExceptions.InvalidGameIDException(gameID, this.gameID, "ID incorrecto. No puede modificar la info de cartas que ya atacaron.");
@@ -484,9 +469,8 @@ namespace ProeliumEngine
             this.lifePoints[playerID] = newLife;
             return;
         }
-
     }
-    public class Table
+    public class Table : ITable
     {
         private List<List<Card>> magicCardsInvokeds;
         private List<List<Card>> monsterCardsInvokeds;
@@ -496,7 +480,6 @@ namespace ProeliumEngine
         private Card? fieldCard;
         private int gameID;
         private int maximumCardsInvokeds;
-
         public Table(List<List<Card>> decks, List<Card> principalDeck, int gameID, int maximumCardsInvokeds = 3)
         {
             this.magicCardsInvokeds = new List<List<Card>> { new List<Card>(3), new List<Card>(3) };
@@ -507,7 +490,6 @@ namespace ProeliumEngine
             this.gameID = gameID;
             this.maximumCardsInvokeds = maximumCardsInvokeds;
         }
-
         public Table(List<List<Card>> magicCardsInvokeds, List<List<Card>> monsterCardsInvokeds, List<List<Card>> decks, List<Card> principalDeck, List<Card> cemetery, Card fieldCard, int gameID, int maximumCardsInvokeds)
         {
             this.magicCardsInvokeds = magicCardsInvokeds;
@@ -612,12 +594,11 @@ namespace ProeliumEngine
             return;
         }
     }
-    public class Rules
+    public class Rules : IRules
     {
         private (int, int) individualDeck;
         private int maxPointsLife;
         private int maxHand;
-        //private ITurn structOfTurn;
         private State state;
         public Rules((int, int) individualDeck, int maxPointsLife, int maxHand, State state)
         {
@@ -630,13 +611,12 @@ namespace ProeliumEngine
         public int MaxPointsLife { get { return this.maxPointsLife; } }
         public int MaxHand { get { return this.maxHand; } }
         public State State { get { return this.state; } }
-
         public bool IsValidMove(Move jugada, PhasesEnum phase, int playerID, State state)
         {
             MyExceptions.InvalidPlayerIDException(playerID, state.Hands.Count - 1);
             switch (jugada.Action)
             {
-                case ActionsEnum.mix://Falta cosiderar si hay fases en específico en las que se pueda (o no) barajar
+                case ActionsEnum.mix:
                     return true;
                 case ActionsEnum.invoke:
                     return (phase == PhasesEnum.mainPhase && IsValidInvoke(playerID, state, jugada)) ? true : (phase == PhasesEnum.endPhase && IsValidInvoke(playerID, state, jugada)) ? true : false;
@@ -644,12 +624,11 @@ namespace ProeliumEngine
                     return (phase == PhasesEnum.battlePhase && IsValidAttack(state, playerID, jugada)) ? true : false;
                 case ActionsEnum.attackLifePoints:
                     return (phase == PhasesEnum.battlePhase && IsValidAttackPointsLife(state, playerID, jugada)) ? true : false;
-                case ActionsEnum.discard: //Falta considerar lo mismo que con el drawPhase
+                case ActionsEnum.discard:
                     return (phase == PhasesEnum.endPhase) ? true : false;
             }
             return true;
         }
-
         public bool IsValidInvoke(int playerID, State state, Move jugada)
         {
             MyExceptions.InvalidPlayerIDException(playerID, state.Hands.Count - 1);
@@ -679,9 +658,6 @@ namespace ProeliumEngine
                 {
                     if (!(invokedMonsterCards.Contains(jugada.CardsInTheAction[1])) || !(state.Table.MonsterCardsInvokeds[playerID].Contains(jugada.CardsInTheAction[0]))) return false;
                 }
-
-                //Falta considerar que las cartas atacante y atacada se encuentren dentro de las invocadas
-                //Falta considerar los ciclos de ataques (1 jugador puede atacar varias veces en una misma fase, cada vez)
             }
             return true;
         }
@@ -699,7 +675,6 @@ namespace ProeliumEngine
                     break;
                 }
             }
-
             foreach (List<Card> invokedMonsterCards in state.Table.MonsterCardsInvokeds)
             {
                 if (state.Table.MonsterCardsInvokeds.IndexOf(invokedMonsterCards) != attackantPlayerID)
@@ -710,8 +685,6 @@ namespace ProeliumEngine
                 {
                     if (invokedMonsterCards.Count <= 0) return false;
                 }
-
-
             }
             return true;
         }
@@ -721,53 +694,12 @@ namespace ProeliumEngine
             {
                 if (lifepoints <= 0) return true;
             }
+            foreach (var deck in state.Table.Decks)
+            {
+                if (deck.Count == 0 && state.ActualPhase == PhasesEnum.drawPhase) return true;
+            }
             return false;
         }
-        /* public Player GetWinner(State state)
-         {
-             Player playerDeRepuesto = new Player("Extra",5);
-             int loserID;
-             MyExceptions.InvalidInvokationOfMethodException(IsEndGame(state), "El juego aún no acaba. No hay ganador.");
-             foreach (float lifepoints in state.LifePoints)
-             {
-                 if (lifepoints <= 0)
-                 {
-                     loserID = state.LifePoints.IndexOf(lifepoints);
-                     foreach (Player player in state.Players)
-                     {
-                         if (state.Players.IndexOf(player) != loserID) return player;
-                     }
-                     break;
-                 }
-             }
-             foreach (List<Card> deck in state.Table.Decks)
-             {
-                 if (deck.Count <= 0)
-                 {
-                     loserID = state.Table.Decks.IndexOf(deck);
-                     foreach (Player player in state.Players)
-                     {
-                         if (state.Players.IndexOf(player) != loserID) return player;
-                     }
-                     break;
-                 }
-             }
-             return
-
-         }*/
-        /* public Player GetLoser(State state)
-         {
-             MyExceptions.InvalidInvokationOfMethodException(IsEndGame(state), "El juego aún no acaba. No hay ganador.");
-             foreach (float lifepoints in state.LifePoints)
-             {
-                 if (lifepoints <= 0) return state.Players[state.LifePoints.IndexOf(lifepoints)];
-             }
-             foreach (List<Card> deck in state.Table.Decks)
-             {
-                 if (deck.Count <= 0) return true;
-             }
-
-         }*/
         public List<Player> GetWinner(State state)
         {
             List<Player> result = new List<Player>();
@@ -779,21 +711,16 @@ namespace ProeliumEngine
                 int countDeckPlayer_1 = state.Table.Decks[0].Count;
                 int countDeckPlayer_2 = state.Table.Decks[1].Count;
 
-                if (lifesPlayer_1 < lifesPlayer_2 || countDeckPlayer_1 == 0 && countDeckPlayer_2 != 0 && lifesPlayer_2 > 0)
+                if ((lifesPlayer_1 < lifesPlayer_2) || (countDeckPlayer_1 == 0 && countDeckPlayer_2 != 0 && lifesPlayer_2 > 0))
                 {
-                    // result = new List<Player>();
-                    // result.Add(state.Players[0]);
                     result.Add(state.Players[1]);
                 }
-                else if (lifesPlayer_2 < lifesPlayer_1 || countDeckPlayer_2 == 0 && countDeckPlayer_1 != 0 && lifesPlayer_1 > 0)
+                else if ((lifesPlayer_2 < lifesPlayer_1) || (countDeckPlayer_2 == 0 && countDeckPlayer_1 != 0 && lifesPlayer_1 > 0))
                 {
-                    // result = new List<Player>();
-                    // result.Add(state.Players[1]);
                     result.Add(state.Players[0]);
                 }
                 else
                 {
-                    // result = new List<Player>();
                     result.Add(state.Players[0]);
                     result.Add(state.Players[1]);
                 }
@@ -802,13 +729,9 @@ namespace ProeliumEngine
             return result;
         }
     }
-
     #endregion Game
 
-
     #region Cards
-    //CONSIDERAR UN BOOL IfACTIVE,POR CARTA, PARA QUE LA CARTA SE ENTERE DE SI ESTA O NO EN JUEGO,
-    // LO CUAL IMPLICARIA QUE SUS VALORES SE PUEDEN MODIFICAR, DE LO CONTRARIO PERMANECERIAN INVARIABLES
     public abstract class Card
     {
         public string Name { get; private set; }
@@ -817,14 +740,13 @@ namespace ProeliumEngine
     public class MonsterCard : Card
     {
         private string name;
-        private float life; //por puntos (programar a parte para la futura creación de un monstruo random)
-        private float attack; //número para la estadística del cálculo de daño (programar a parte para la futura creación de un monstruo random)
-        private float defense; //número para la estadística del cálculo de daño (programar a parte para la futura creación de un monstruo random)
+        private float life; //por puntos
+        private float attack; //número para la estadística del cálculo de daño
+        private float defense; //número para la estadística del cálculo de daño
         private int gameID = 1;//Type
         private Statement Effect;
-        public string Description {get; private set;}
-
-        //private T cardState; //normal, borracho, lento, óptimo, moral... por efecto de alguna carta de hechizo (programar a parte para la futura creación de un monstruo random)
+        public string Description { get; private set; }
+        //private T cardState; //normal, borracho, lento, óptimo, moral... por efecto de alguna carta de hechizo (FUTURA MODIFICACION)
 
         public MonsterCard(string name, float life, float attack, float defense, string strEffect, string description)
         {
@@ -836,16 +758,14 @@ namespace ProeliumEngine
             this.Description = description;
         }
         public string Name { get { return this.name; } }
-        // public CardState CardState { get { return this.cardState; } }
+        // public CardState CardState { get { return this.cardState; } } (FUTURA MODIFICACION)
         public float Life { get { return this.life; } }
         public float Attack { get { return this.attack; } }
         public float Defense { get { return this.defense; } }
-
         public override State EffectExecute(State state, int playerID)
         {
             return Effect.Execute(state, playerID, this);
         }
-
         public void SetLife(int gameID, float modifiedLife)
         {
             MyExceptions.InvalidGameIDException(gameID, this.gameID, "ID incorrecto. No puede modificar la vida del monstruo " + this.name + ".");
@@ -864,9 +784,9 @@ namespace ProeliumEngine
             this.defense = modifiedDefense;
             return;
         }
-        //public T condicionesDeEvolucion, ***EXTRA***
-        // ***CONDICION FENIX*** (exigencias que pide la carta a cambio de su resucitación: sacrificar 3 monstruos, estar en un campo específico, tener en juego 10 cartas x...)
-        // Valorar que al resucitar una carta su estado sea ***"VETERANO"*** lo que se traduce a una cierta inmunidad hacia la carta que la envió al cementerio 
+        //public T condicionesDeEvolucion, (FUTURA MODIFICACION)
+        // ***CONDICION FENIX*** (exigencias que pide la carta a cambio de su resucitación: sacrificar 3 monstruos, estar en un campo específico, tener en juego 10 cartas x...) (FUTURA MODIFICACION)
+        // Valorar que al resucitar una carta su estado sea ***"VETERANO"*** lo que se traduce a una cierta inmunidad hacia la carta que la envió al cementerio (FUTURA MODIFICACION)
     }
     public class MagicCard : Card
     {
@@ -894,7 +814,6 @@ namespace ProeliumEngine
             return Effect.Execute(state, playerID);
         }
     }
-
     #endregion Cards
 
     #region Players
@@ -914,41 +833,24 @@ namespace ProeliumEngine
         public ActionsEnum Action { get { return this.action; } }
         public List<Card> CardsInTheAction { get { return this.cardsInTheAction; } }
     }
-    ///<summary>
-    /// Clase que representa un jugador de la partida
-    /// <para> Cada jugador tiene un nombre, un id y una lista de estrategias</para>
-    /// <para> Contiene una lista de estrategias</para>
-    /// </summary> 
     public class Player
     {
         private List<IStrategy> strategies;
         private string name;
         private int ID_;
-        // private Move move;
-        // private State state;
-
-        ///<summary>
-        /// Constructor de la clase Player
-        /// </summary>
-        /// <param name="name">Nombre del jugador</param>
-        /// <param name="ID">ID del jugador</param>
-        /// <param name="strategies">Lista de estrategias del jugador</param>
-        public Player(string name, int ID/*, State state*/, List<IStrategy> strategies)
+        public Player(string name, int ID, List<IStrategy> strategies)
         {
             this.name = name;
             this.ID_ = ID;
-            // this.state = state;
             this.strategies = strategies;
         }
         public string Name { get { return this.name; } }
         public int ID { get { return this.ID_; } }
-        // public Move Move_ { get { return this.move; } }
         public virtual Move Jugada(State state) //las jugadas que hará el jugador
         {
             return this.strategies[0].Play(state);
         }
     }
-    //private State state;
     public class Greedy : IStrategy
     {
         private Rules rules;
@@ -1031,7 +933,5 @@ namespace ProeliumEngine
             return new Move(ActionsEnum.endPhase);
         }
     }
-
-
     #endregion Players
 }

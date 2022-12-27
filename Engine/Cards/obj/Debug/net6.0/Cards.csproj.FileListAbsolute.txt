@@ -43,3 +43,18 @@
 /home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.pdb
 /home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/Cards.genruntimeconfig.cache
 /home/heveryt/Proelium/Engine/Cards/obj/Debug/net6.0/ref/Cards.dll
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\bin\Debug\net6.0\Cards.exe
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\bin\Debug\net6.0\Cards.deps.json
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\bin\Debug\net6.0\Cards.runtimeconfig.json
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\bin\Debug\net6.0\Cards.dll
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\bin\Debug\net6.0\Cards.pdb
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.csproj.AssemblyReference.cache
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.GeneratedMSBuildEditorConfig.editorconfig
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.AssemblyInfoInputs.cache
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.AssemblyInfo.cs
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.csproj.CoreCompileInputs.cache
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.dll
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\refint\Cards.dll
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.pdb
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\Cards.genruntimeconfig.cache
+E:\Universidad\Programacion\1ero\2do semestre\.PROYECTOS\.Proelium\2daPrueba del juego\Proelium\Engine\Cards\obj\Debug\net6.0\ref\Cards.dll
