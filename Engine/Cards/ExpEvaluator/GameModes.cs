@@ -127,7 +127,7 @@ public class GameModes
 
     public static void Clear()
     {
-        for(int i = 0; i< 10; i++)
+        for(int i = 0; i< 30; i++)
         {
             Console.SetCursorPosition(65,4+i);
             Console.WriteLine("                                                                                                             ");
