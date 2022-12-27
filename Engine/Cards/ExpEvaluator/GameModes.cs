@@ -28,6 +28,7 @@ public class GameModes
             temp = actual;
             PrintGame(actual);
         }
+        PrintGame(actual);
 
         PrintWinner(temp, rules);
     }
@@ -57,6 +58,7 @@ public class GameModes
             temp = actual;
             PrintGame(actual);
         }
+        PrintGame(actual);
 
         PrintWinner(temp, rules);
     }
@@ -87,6 +89,7 @@ public class GameModes
             temp = actual;
             PrintGame(actual);
         }
+        PrintGame(actual);
 
         PrintWinner(temp, rules);
         
