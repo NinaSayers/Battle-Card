@@ -9,7 +9,7 @@ public class Serialize
     public static List<Card> Deserial()
     {
         List<Card> cards = new List<Card>();
-
+        System.Console.WriteLine(Directory.GetCurrentDirectory());
         DirectoryInfo di = new DirectoryInfo(@"./DataBase/CardsInfo/Spell");
         FileInfo[] files = di.GetFiles("*.json", SearchOption.AllDirectories);
         string [] path = new string[files.Length];

@@ -51,4 +51,4 @@ if PlayerID idemI 1 then
         draw 2;
 ```
 
-Nota que en el ejemplo se utiliza la palabra clave `PlayerID` para referirse al jugador activo, y `Player1` y `Player2` para referirse al jugador 1 y 2 respectivamente. Asi mismo, se utiliza `Player1.life` para referirse a los puntos de vida del jugador 1.
+*Nota que en el ejemplo se utiliza la palabra clave `PlayerID` para referirse al jugador activo, y `Player1` y `Player2` para referirse al jugador 1 y 2 respectivamente. Asi mismo, se utiliza `Player1.life` para referirse a los puntos de vida del jugador 1.*

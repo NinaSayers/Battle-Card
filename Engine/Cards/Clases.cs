@@ -41,10 +41,7 @@ namespace ProeliumEngine
                         {
                             this.state.SetActualPhase(this.gameID, phase);
                             yield return this.state;
-
-                            if (this.rules.IsEndGame(this.state)) { end = true; break; }
-                            else
-                                this.actions.Draw(player.ID, this.gameID, state);
+                            this.actions.Draw(player.ID, this.gameID, state);
                             yield return this.state;
                             continue;
                         }
