@@ -224,6 +224,7 @@ namespace ProeliumEngine
             if (card is FieldCard)
             {
                 MyExceptions.NoFoundedCardException(state.GetHand(playerID), card, "No se pueden invocar cartas que no estén en la mano del jugador.");
+                newState.RemoveCardsToHand(this.gameID, playerID, card);
                 newState.Table.SetFieldCard(this.gameID, (card as FieldCard)!);
             }
             return newState;
